@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://foxconn/fbrla/webservice/test" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://foxconn/fbrla/webservice/test" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://foxconn/fbrla/webservice/test">
+      <s:element name="SFIS_LOGIN">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="operatorId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="productionLine" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="stationGroup" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="hostname" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SFIS_LOGINResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SFIS_LOGINResult" type="tns:ReturnDefault" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ReturnDefault">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Return" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Return">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="StatusCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SFIS_CHECK_STATUS">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="motherBoardSerialNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="stationGroup" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SFIS_CHECK_STATUSResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SFIS_CHECK_STATUSResult" type="tns:ReturnDefault" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SFIS_GET_DATA">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="motherBoardSerialNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SFIS_GET_DATAResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SFIS_GET_DATAResult" type="tns:ReturnData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ReturnData">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Return">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Configuration" type="tns:DeviceConfiguration" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="DeviceConfiguration">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="BluetoothMac" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WifiMac" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Imei1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Imei2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeviceUnderTestSerialNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ColorCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Sku" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OsVersion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="KeyBox" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GoogleKey" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MotherBoardSerialNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CustomerCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SkuFullDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PackingCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MmiFile" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MediaFile" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ApdFile" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ApkFile" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AdfFile" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ModelName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CpuSpeed" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RamSize" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EmmcSize" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TestCpuModel" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AtTestStationKey" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HdcpKey" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="QKey" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TestCtsDeviceName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Macs" type="tns:ArrayOfMac" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeviceDetails" type="tns:ArrayOfDeviceDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfMac">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Mac" nillable="true" type="tns:Mac" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Mac">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="Sequence" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfDeviceDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DeviceDetail" nillable="true" type="tns:DeviceDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DeviceDetail">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="Key" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:element name="SFIS_SEND_DATA">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="deviceLog" type="tns:DeviceLog" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DeviceLog">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="MotherBoardSerialNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OSVersion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GoogleKeyFileName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FrontCameraLog" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FrontCameraLog2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RearCameraLog" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RearCameraLog2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HardwareVersion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EPC" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Details" type="tns:ArrayOfDeviceDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SFIS_SEND_DATAResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SFIS_SEND_DATAResult" type="tns:ReturnDefault" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SFIS_LOGOUT">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="motherBoardSerialNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="operatorId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="productionLine" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="stationGroup" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="hostname" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="statusCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SFIS_LOGOUTResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SFIS_LOGOUTResult" type="tns:ReturnDefault" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SFIS_LOGOUT_WEIGHT">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="tns:SendLogoutWeight" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SendLogoutWeight">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="SerialNumberList" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="OperatorId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProductionLine" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StationGroup" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Hostname" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="statusCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Weight" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SFIS_LOGOUT_WEIGHTResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SFIS_LOGOUT_WEIGHTResult" type="tns:ReturnMotherBoxLabeData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ReturnMotherBoxLabeData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="StatusCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Sku" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Uom" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="MotherBoxLabelData" type="tns:ArrayOfKeyPair" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfKeyPair">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="KeyPair" nillable="true" type="tns:KeyPair" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="KeyPair">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Key" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SFIS_RESET_MOTHERBOX">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="motherBoxId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SFIS_RESET_MOTHERBOXResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SFIS_RESET_MOTHERBOXResult" type="tns:ReturnDefault" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SFIS_GET_PRINT_DATA">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="serialNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="groupName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SFIS_GET_PRINT_DATAResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SFIS_GET_PRINT_DATAResult" type="tns:ReturnDataPrintResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ReturnDataPrintResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="StatusCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PrintDataResult" type="tns:ArrayOfPrintData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfPrintData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="PrintData" nillable="true" type="tns:PrintData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PrintData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Key" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="SFIS_LOGINSoapIn">
+    <wsdl:part name="parameters" element="tns:SFIS_LOGIN" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_LOGINSoapOut">
+    <wsdl:part name="parameters" element="tns:SFIS_LOGINResponse" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_CHECK_STATUSSoapIn">
+    <wsdl:part name="parameters" element="tns:SFIS_CHECK_STATUS" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_CHECK_STATUSSoapOut">
+    <wsdl:part name="parameters" element="tns:SFIS_CHECK_STATUSResponse" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_GET_DATASoapIn">
+    <wsdl:part name="parameters" element="tns:SFIS_GET_DATA" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_GET_DATASoapOut">
+    <wsdl:part name="parameters" element="tns:SFIS_GET_DATAResponse" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_SEND_DATASoapIn">
+    <wsdl:part name="parameters" element="tns:SFIS_SEND_DATA" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_SEND_DATASoapOut">
+    <wsdl:part name="parameters" element="tns:SFIS_SEND_DATAResponse" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_LOGOUTSoapIn">
+    <wsdl:part name="parameters" element="tns:SFIS_LOGOUT" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_LOGOUTSoapOut">
+    <wsdl:part name="parameters" element="tns:SFIS_LOGOUTResponse" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_LOGOUT_WEIGHTSoapIn">
+    <wsdl:part name="parameters" element="tns:SFIS_LOGOUT_WEIGHT" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_LOGOUT_WEIGHTSoapOut">
+    <wsdl:part name="parameters" element="tns:SFIS_LOGOUT_WEIGHTResponse" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_RESET_MOTHERBOXSoapIn">
+    <wsdl:part name="parameters" element="tns:SFIS_RESET_MOTHERBOX" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_RESET_MOTHERBOXSoapOut">
+    <wsdl:part name="parameters" element="tns:SFIS_RESET_MOTHERBOXResponse" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_GET_PRINT_DATASoapIn">
+    <wsdl:part name="parameters" element="tns:SFIS_GET_PRINT_DATA" />
+  </wsdl:message>
+  <wsdl:message name="SFIS_GET_PRINT_DATASoapOut">
+    <wsdl:part name="parameters" element="tns:SFIS_GET_PRINT_DATAResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WebServiceTestSoap">
+    <wsdl:operation name="SFIS_LOGIN">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Checks username, password, production line and hostname</wsdl:documentation>
+      <wsdl:input message="tns:SFIS_LOGINSoapIn" />
+      <wsdl:output message="tns:SFIS_LOGINSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_CHECK_STATUS">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Check device status</wsdl:documentation>
+      <wsdl:input message="tns:SFIS_CHECK_STATUSSoapIn" />
+      <wsdl:output message="tns:SFIS_CHECK_STATUSSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_GET_DATA">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get SFIS data for given device</wsdl:documentation>
+      <wsdl:input message="tns:SFIS_GET_DATASoapIn" />
+      <wsdl:output message="tns:SFIS_GET_DATASoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_SEND_DATA">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Send device log data to SFIS</wsdl:documentation>
+      <wsdl:input message="tns:SFIS_SEND_DATASoapIn" />
+      <wsdl:output message="tns:SFIS_SEND_DATASoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_LOGOUT">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Send test result to SFIS</wsdl:documentation>
+      <wsdl:input message="tns:SFIS_LOGOUTSoapIn" />
+      <wsdl:output message="tns:SFIS_LOGOUTSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_LOGOUT_WEIGHT">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Check device status / logout auto weight</wsdl:documentation>
+      <wsdl:input message="tns:SFIS_LOGOUT_WEIGHTSoapIn" />
+      <wsdl:output message="tns:SFIS_LOGOUT_WEIGHTSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_RESET_MOTHERBOX">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Reset devices / motherbox on TEST enviroment only</wsdl:documentation>
+      <wsdl:input message="tns:SFIS_RESET_MOTHERBOXSoapIn" />
+      <wsdl:output message="tns:SFIS_RESET_MOTHERBOXSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_GET_PRINT_DATA">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Data for label printing</wsdl:documentation>
+      <wsdl:input message="tns:SFIS_GET_PRINT_DATASoapIn" />
+      <wsdl:output message="tns:SFIS_GET_PRINT_DATASoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WebServiceTestSoap" type="tns:WebServiceTestSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SFIS_LOGIN">
+      <soap:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_LOGIN" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_CHECK_STATUS">
+      <soap:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_CHECK_STATUS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_GET_DATA">
+      <soap:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_GET_DATA" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_SEND_DATA">
+      <soap:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_SEND_DATA" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_LOGOUT">
+      <soap:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_LOGOUT" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_LOGOUT_WEIGHT">
+      <soap:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_LOGOUT_WEIGHT" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_RESET_MOTHERBOX">
+      <soap:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_RESET_MOTHERBOX" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_GET_PRINT_DATA">
+      <soap:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_GET_PRINT_DATA" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WebServiceTestSoap12" type="tns:WebServiceTestSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SFIS_LOGIN">
+      <soap12:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_LOGIN" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_CHECK_STATUS">
+      <soap12:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_CHECK_STATUS" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_GET_DATA">
+      <soap12:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_GET_DATA" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_SEND_DATA">
+      <soap12:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_SEND_DATA" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_LOGOUT">
+      <soap12:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_LOGOUT" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_LOGOUT_WEIGHT">
+      <soap12:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_LOGOUT_WEIGHT" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_RESET_MOTHERBOX">
+      <soap12:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_RESET_MOTHERBOX" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SFIS_GET_PRINT_DATA">
+      <soap12:operation soapAction="http://foxconn/fbrla/webservice/test/SFIS_GET_PRINT_DATA" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WebServiceTest">
+    <wsdl:port name="WebServiceTestSoap" binding="tns:WebServiceTestSoap">
+      <soap:address location="http://10.8.2.50:88/WebServiceTest.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WebServiceTestSoap12" binding="tns:WebServiceTestSoap12">
+      <soap12:address location="http://10.8.2.50:88/WebServiceTest.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
