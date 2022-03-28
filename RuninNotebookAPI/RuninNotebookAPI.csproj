@@ -172,6 +172,7 @@
     <Compile Include="Controllers\Runin1OutController.cs" />
     <Compile Include="Controllers\Runin2InController.cs" />
     <Compile Include="Controllers\Runin2OutController.cs" />
+    <Compile Include="Controllers\RuninLayOutController.cs" />
     <Compile Include="Controllers\SendDataController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DB\ConexaoDB.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Models\NBMAC.cs" />
     <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\Produto_Movimento.cs" />
+    <Compile Include="Models\Runin_LayOut.cs" />
     <Compile Include="Models\WebSFIS_GET.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
