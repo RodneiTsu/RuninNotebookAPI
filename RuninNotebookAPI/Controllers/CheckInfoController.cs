@@ -14,8 +14,6 @@ namespace RuninNotebookAPI.Controllers
     {
         public object MSG { get; private set; }
 
-        public int ID { get; set; }
-
         [HttpGet]
         public IHttpActionResult Out_GET(string ssn)
         {
@@ -137,10 +135,7 @@ namespace RuninNotebookAPI.Controllers
                         }
                     }
                     l++;
-                }
-
-
-               
+                }               
             }
             catch (Exception)
             {

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
@@ -23,7 +19,6 @@ namespace RuninNotebookAPI.Controllers
                 NotFound();
             }
 
-            
             Produto product = new Produto();
             Produto_Movimento product_movement = new Produto_Movimento();
 
@@ -65,7 +60,6 @@ namespace RuninNotebookAPI.Controllers
 
                 string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct = {ID} and WorkGroup ='PRETEST' and Status_Code ='1'";
                 ConexaoDB.CRUD_tabela(sqlPM_pretest);
-
             }
             else
             {

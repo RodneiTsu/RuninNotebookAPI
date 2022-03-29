@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace RuninNotebookAPI.Models
 {
     public class Runin_LayOut
     {
-
         public int idRunin_Layout { get; set; }
         public string Descricao { get; set; }
         public string Lado { get; set; }

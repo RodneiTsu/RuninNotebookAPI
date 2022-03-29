@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Web.Http;
 
 namespace RuninNotebookAPI.Controllers
-{
-    
+{    
     public class PretestOutController : ApiController
     {
         public object MSG { get; private set; }
@@ -75,6 +70,5 @@ namespace RuninNotebookAPI.Controllers
             MSG = "set result=0";
             return Json(MSG);
         }
-
     }
 }

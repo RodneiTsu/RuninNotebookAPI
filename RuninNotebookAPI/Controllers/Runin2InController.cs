@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
@@ -11,7 +7,6 @@ namespace RuninNotebookAPI.Controllers
 {
     public class Runin2InController : ApiController
     {
-
         public object MSG { get; private set; }
 
         public int ID { get; set; }
@@ -23,7 +18,6 @@ namespace RuninNotebookAPI.Controllers
             {
                 NotFound();
             }
-
 
             Produto product = new Produto();
             Produto_Movimento product_movement = new Produto_Movimento();
@@ -66,7 +60,6 @@ namespace RuninNotebookAPI.Controllers
 
                 string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct = {ID} and WorkGroup ='RUNIN1' and Status_Code ='1'";
                 ConexaoDB.CRUD_tabela(sqlPM_pretest);
-
             }
             else
             {
@@ -76,6 +69,5 @@ namespace RuninNotebookAPI.Controllers
             MSG = "set result=0";
             return Ok(MSG);
         }
-
     }
 }

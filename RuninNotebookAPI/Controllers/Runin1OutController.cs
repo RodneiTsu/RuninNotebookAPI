@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
@@ -12,8 +8,6 @@ namespace RuninNotebookAPI.Controllers
     public class Runin1OutController : ApiController
     {
         public object MSG { get; private set; }
-
-        public int ID { get; set; }
 
         [HttpGet]
         public IHttpActionResult Out_GET(string ssn)
@@ -68,9 +62,6 @@ namespace RuninNotebookAPI.Controllers
 
                 MSG = "Erro ao gravar product_movement";
                 ConexaoDB.CRUD_tabela(SQL);
-
-
-
             }
             catch (Exception)
             {

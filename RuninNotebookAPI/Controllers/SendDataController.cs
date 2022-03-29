@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Web.Http;
@@ -22,14 +18,11 @@ namespace RuninNotebookAPI.Controllers
                 NotFound();
             }
 
-
-
             string[] Columns = ssn.Split(',');
 
             WebSFIS_GET wb = new WebSFIS_GET();
             Produto product = new Produto();
             NBMAC nbmac = new NBMAC();
-
 
             if (Columns[0].Length == 15 || Columns[0].Length == 12 || Columns[0].Length == 22)
             {
@@ -64,8 +57,7 @@ namespace RuninNotebookAPI.Controllers
             nbmac.BTMAC = Columns[4];
             nbmac.LANMAC = Columns[5];
             nbmac.UUID = Columns[6];
-           
-            
+                     
             int pos = 0;
             string nome = "";
             foreach(string vazio in Columns)
@@ -93,7 +85,6 @@ namespace RuninNotebookAPI.Controllers
                 }
                 pos++;
             }
-
             try
             {
                 if (wb.CustomerCode == "ASUS")
@@ -102,7 +93,6 @@ namespace RuninNotebookAPI.Controllers
                     {
                         string sqlasus = $@"select count(ID_MAC) from nbmac where SSN='{product.Serial_Number}";
                         string sqltemMAC = $@"select ID_MAC,SSN,mac,uuid,datecreate from nbmac where mac in ('{nbmac.WLANMAC}','{nbmac.BTMAC}','{nbmac.LANMAC}') order by ID_MAC";
-
 
                         int qtdSSN = ConexaoDB.CRUDValor_tabela(sqlasus);
 
@@ -116,7 +106,6 @@ namespace RuninNotebookAPI.Controllers
                                 {
                                     if (product.Serial_Number == linha[1].ToString())
                                     {
-
                                         if (i == 1)
                                         { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.WLANMAC}',UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
                                         else
@@ -159,7 +148,6 @@ namespace RuninNotebookAPI.Controllers
                         string sqlacer = $@"select count(ID_MAC) from nbmac where SSN='{product.CustomerSerial}'";
                         string sqltemMAC = $@"select ID_MAC,SSN,mac,uuid,datecreate from nbmac where mac in ('{nbmac.WLANMAC}','{nbmac.BTMAC}','{nbmac.LANMAC}') order by ID_MAC";
 
-
                         int qtdSSN = ConexaoDB.CRUDValor_tabela(sqlacer);
 
                         if (qtdSSN > 0)
@@ -172,7 +160,6 @@ namespace RuninNotebookAPI.Controllers
                                 {
                                     if (product.CustomerSerial == linha[1].ToString())
                                     {
-
                                         if (i == 1)
                                         { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.WLANMAC}',UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
                                         else if(i == 2)
@@ -198,15 +185,18 @@ namespace RuninNotebookAPI.Controllers
                                 MSG = $@"MAC duplicado WLANMAC->{Columns[3]} ou BTMAC->{Columns[4]}";
                                 return Json(MSG);
                             }
+
                             MSG = $@"Erro ao gravar na tabela de NBMAC";
+                            
                             string gravaWLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.WLANMAC}','{nbmac.UUID}','{product.CustomerSerial}')";
                             ConexaoDB.CRUD_tabela(gravaWLANMAC);
+                            
                             string gravaBTMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.BTMAC}','{nbmac.UUID}','{product.CustomerSerial}')";
                             ConexaoDB.CRUD_tabela(gravaBTMAC);
+                            
                             string gravaLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.LANMAC}','{nbmac.UUID}','{product.CustomerSerial}')";
                             ConexaoDB.CRUD_tabela(gravaLANMAC);
                         }
-
                     }
                     else
                     {

@@ -19,7 +19,7 @@ namespace RuninNotebookAPI.DB
 
         public MySqlConnection PegarConexao()
         {
-            string con = "Server=10.8.2.207; Port=3306;Database=BackupEngTeste;Uid=engusr;Pwd=Eng$up";
+            string con = "Server=10.8.2.207; Port=3306;Database=EngTeste;Uid=engusr;Pwd=Eng$up";
             //string con = ConfigurationManager.ConnectionStrings["DBString"].ToString();
             return new MySqlConnection(con);
         }
@@ -60,7 +60,6 @@ namespace RuninNotebookAPI.DB
                 conexao.Close();
                 da.Dispose();
             }
-
             return dt ;
         }
 
@@ -79,7 +78,6 @@ namespace RuninNotebookAPI.DB
 
                     throw;
                 }
-                
                 conexao.Close();
             }
         }
@@ -100,7 +98,6 @@ namespace RuninNotebookAPI.DB
                 {
                     throw;
                 }
-
                 conexao.Close();
             }
             return qtd;
@@ -122,7 +119,6 @@ namespace RuninNotebookAPI.DB
                 {
                     throw;
                 }
-
                 conexao.Close();
             }
             return qtd;
@@ -143,7 +139,6 @@ namespace RuninNotebookAPI.DB
                 {
                     throw;
                 }
-
                 conexao.Close();
             }
             return campo;
