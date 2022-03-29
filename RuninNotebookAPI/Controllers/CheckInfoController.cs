@@ -66,9 +66,10 @@ namespace RuninNotebookAPI.Controllers
 
             if (product.Customer=="ACER")
             {
-                if (Columns[0].ToString().Length < 22)
+                int conta = Columns[0].ToString().Length;
+                if (Columns[0].ToUpper().ToString().ToUpper().Substring(9, 3) == "935" || Columns[0].Length == 22)
                 {
-                    product.CustomerSerial = ConexaoDB.CRUDCampo_tabela($@"SELECT CustomerSerial FROM backupengteste.product where Serial_number='{product.Serial_Number}'");
+                    product.CustomerSerial = ConexaoDB.CRUDCampo_tabela($@"SELECT CustomerSerial FROM product where Serial_number='{product.Serial_Number}'");
                     sqlmac = $@"select id_mac,mac,uuid,ssn,datecreate from nbmac where ssn='{product.CustomerSerial}' order by ID_MAC";
                 }
                 else
@@ -107,7 +108,7 @@ namespace RuninNotebookAPI.Controllers
                     {
                         if ((l==1) && (linha[1].ToString()!=nbmac.WLANMAC) || (l == 1) && linha[2].ToString()!= nbmac.UUID)
                         {
-                            MSG = $@"Diferente WLANMAC DB->{nbmac.WLANMAC} / WLANMAC->{linha[2].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
+                            MSG = $@"Diferente WLANMAC DB->{nbmac.WLANMAC} / WLANMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
                             return Json(MSG);
                         }
                         else if ((l == 2) && (linha[1].ToString() != nbmac.BTMAC) || (l == 2) && linha[2].ToString() != nbmac.UUID)

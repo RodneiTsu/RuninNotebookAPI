@@ -95,60 +95,55 @@ namespace RuninNotebookAPI.Controllers
                 {
                     if (nbmac.WLANMAC.Length > 0 && nbmac.BTMAC.Length > 0)
                     {
-                        string sqlasus = $@"select count(ID_MAC) from nbmac where SSN='{product.Serial_Number}'";
-                        string sqltemMAC = $@"select ID_MAC,SSN,mac,uuid,datecreate from nbmac where mac in ('{nbmac.WLANMAC}','{nbmac.BTMAC}','{nbmac.LANMAC}') order by ID_MAC";
+                        string sqltemMAC = $@"select ID_MAC,SSN,mac,uuid,datecreate from nbmac where SSN='{product.Serial_Number}' order by ID_MAC";
 
-                        int qtdSSN = ConexaoDB.CRUDValor_tabela(sqlasus);
-
-                        if (qtdSSN>0)
+                        DataTable ASUSupdate = ConexaoDB.Carrega_Tabela(sqltemMAC);
+                        if (ASUSupdate.Rows.Count == 2)
                         {
-                            DataTable ASUSupdate = ConexaoDB.Carrega_Tabela(sqltemMAC);
-                            if (ASUSupdate.Rows.Count == 2)
+                            int i = 1;
+                            foreach (DataRow linha in ASUSupdate.Rows)
                             {
-                                int i = 1;
-                                foreach (DataRow linha in ASUSupdate.Rows)
+                                try
                                 {
-                                    if (product.Serial_Number == linha[1].ToString())
-                                    {
-                                        if (i == 1)
-                                        { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.WLANMAC}',UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
-                                        else
-                                        { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.BTMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
-                                    }
+                                    if (i == 1)
+                                    { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.WLANMAC}',UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
                                     else
-                                    {
-                                        MSG = $@"ssn={linha[1]},MAC={linha[2]},UUID={linha[3]},Dt criação={linha[4]}";
-                                        return Json(MSG);
-                                    }
-                                    i++;
+                                    { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.BTMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
                                 }
-                            }
-                            if (ASUSupdate.Rows.Count == 3)
-                            {
-                                int i = 1;
-                                foreach (DataRow linha in ASUSupdate.Rows)
+                                catch (Exception e)
                                 {
-                                    if (product.Serial_Number == linha[1].ToString())
-                                    {
-                                        if (i == 1)
-                                        { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.WLANMAC}',UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
-                                        else if (i==2)
-                                        { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.BTMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
-                                        else if (i==3)
-                                        { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.LANMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
-                                    }
-                                    else
-                                    {
-                                        MSG = $@"ssn={linha[1]},MAC={linha[2]},UUID={linha[3]},Dt criação={linha[4]}";
-                                        return Json(MSG);
-                                    }
-                                    i++;
-                                }
-                            }
 
+                                   return Json(e.ToString()) ;
+                                }
+                                
+                                i++;
+                            }
                         }
-                        else
+                        else if (ASUSupdate.Rows.Count == 3)
                         {
+                            int i = 1;
+                            foreach (DataRow linha in ASUSupdate.Rows)
+                            {
+                                try
+                                {
+                                    if (i == 1)
+                                    { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.WLANMAC}',UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
+                                    else if (i == 2)
+                                    { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.BTMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
+                                    else if (i == 3)
+                                    { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.LANMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
+                                }
+                                catch (Exception e)
+                                {
+
+                                    return Json(e.ToString());
+                                }
+                                i++;
+                            }
+                        }
+                        else if (ASUSupdate.Rows.Count == 0)
+                        {
+                            sqltemMAC = $@"select count(ID_MAC) from nbmac where mac in ('{nbmac.WLANMAC}','{nbmac.BTMAC}','{nbmac.LANMAC}') order by ID_MAC";
                             int temMAC =  ConexaoDB.CRUDValor_tabela(sqltemMAC);
                             if (temMAC>0)
                             {
@@ -160,6 +155,14 @@ namespace RuninNotebookAPI.Controllers
                             ConexaoDB.CRUD_tabela(gravaWLANMAC);
                             string gravaBTMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.BTMAC}','{nbmac.UUID}','{product.Serial_Number}')";
                             ConexaoDB.CRUD_tabela(gravaBTMAC);
+
+                            if (!string.IsNullOrEmpty(nbmac.LANMAC))
+                            {
+                                string gravaLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.LANMAC}','{nbmac.UUID}','{product.Serial_Number}')";
+                                ConexaoDB.CRUD_tabela(gravaLANMAC);
+
+                            }
+
                         }
                     }
                     else
@@ -172,40 +175,27 @@ namespace RuninNotebookAPI.Controllers
                 {
                     if (nbmac.WLANMAC.Length > 0 && nbmac.BTMAC.Length > 0 && nbmac.LANMAC.Length > 0)
                     {
-                        string sqlacer = $@"select count(ID_MAC) from nbmac where SSN='{product.CustomerSerial}'";
-                        string sqltemMAC = $@"select ID_MAC,SSN,mac,uuid,datecreate from nbmac where mac in ('{nbmac.WLANMAC}','{nbmac.BTMAC}','{nbmac.LANMAC}') order by ID_MAC";
+                        
+                        DataTable MACOLD = ConexaoDB.Carrega_Tabela($@"select ID_MAC,SSN,mac,uuid,datecreate from nbmac where SSN='{product.CustomerSerial}' order by ID_MAC");
 
-                        int qtdSSN = ConexaoDB.CRUDValor_tabela(sqlacer);
-
-                        if (qtdSSN > 0)
+                        if (MACOLD.Rows.Count == 3)
                         {
-                            DataTable ACERupdate = ConexaoDB.Carrega_Tabela(sqltemMAC);
-                            if (ACERupdate.Rows.Count == 3)
+                            int i = 1;
+                            foreach (DataRow linha in MACOLD.Rows)
                             {
-                                int i = 1;
-                                foreach (DataRow linha in ACERupdate.Rows)
-                                {
-                                    if (product.CustomerSerial == linha[1].ToString())
-                                    {
-                                        if (i == 1)
-                                        { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.WLANMAC}',UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
-                                        else if (i == 2)
-                                        { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.BTMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
-                                        else if (i == 3)
-                                        { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.LANMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
-                                    }
-                                    else
-                                    {
-                                        MSG = $@"ssn={linha[1]},MAC={linha[2]},UUID={linha[3]},Dt criação={linha[4]}";
-                                        return Json(MSG);
-                                    }
-                                    i++;
-                                }
+                                if (i == 1)
+                                { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.WLANMAC}',UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
+                                else if (i == 2)
+                                { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.BTMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
+                                else if (i == 3)
+                                { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.LANMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
+
+                                i++;
                             }
                         }
                         else
                         {
-                            sqltemMAC = $@"select count(ID_MAC) from nbmac where mac in ('{nbmac.WLANMAC}','{nbmac.BTMAC}','{nbmac.LANMAC}') order by ID_MAC";
+                            string sqltemMAC = $@"select count(ID_MAC) from nbmac where mac in ('{nbmac.WLANMAC}','{nbmac.BTMAC}','{nbmac.LANMAC}') order by ID_MAC";
                             int temMAC = ConexaoDB.CRUDValor_tabela(sqltemMAC);
                             if (temMAC > 0)
                             {
@@ -227,30 +217,23 @@ namespace RuninNotebookAPI.Controllers
                     }
                     else if (nbmac.LANMAC.Length > 0)
                     {
-                        string sqlacer = $@"select count(ID_MAC) from nbmac where SSN='{product.CustomerSerial}'";
-                        string sqltemMAC = $@"select ID_MAC,SSN,mac,uuid,datecreate from nbmac where mac in ('{nbmac.LANMAC}') order by ID_MAC";
+                        string sqltemMAC = $@"select ID_MAC,SSN,mac,uuid,datecreate from nbmac where SSN='{product.CustomerSerial}' order by ID_MAC";
 
-                        int qtdSSN = ConexaoDB.CRUDValor_tabela(sqlacer);
-                        if (qtdSSN > 0)
+                        DataTable ACERupdate = ConexaoDB.Carrega_Tabela(sqltemMAC);
+                        if (ACERupdate.Rows.Count == 1)
                         {
-                            DataTable ACERupdate = ConexaoDB.Carrega_Tabela(sqltemMAC);
-                            if (ACERupdate.Rows.Count == 1)
+                            foreach (DataRow linha in ACERupdate.Rows)
                             {
-                                int i = 1;
-                                foreach (DataRow linha in ACERupdate.Rows)
+                                try
                                 {
-                                    if (product.CustomerSerial == linha[1].ToString())
-                                    {
-                                        if (i == 1)
-                                        { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.LANMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
-                                    }
-                                    else
-                                    {
-                                        MSG = $@"ssn={linha[1]},MAC={linha[2]},UUID={linha[3]},Dt criação={linha[4]}";
-                                        return Json(MSG);
-                                    }
-                                    i++;
+                                    ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.LANMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]);
                                 }
+                                catch (Exception e)
+                                {
+
+                                    return Json(e.ToString());
+                                }
+                               
                             }
                         }
                         else
@@ -266,7 +249,16 @@ namespace RuninNotebookAPI.Controllers
                             MSG = $@"Erro ao gravar na tabela de NBMAC";
 
                             string gravaLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.LANMAC}','{nbmac.UUID}','{product.CustomerSerial}')";
-                            ConexaoDB.CRUD_tabela(gravaLANMAC);
+                            try
+                            {
+                                ConexaoDB.CRUD_tabela(gravaLANMAC);
+                            }
+                            catch (Exception e)
+                            {
+
+                                return Json(e.ToString());
+                            }
+                            
                         }
                     }
                     else
