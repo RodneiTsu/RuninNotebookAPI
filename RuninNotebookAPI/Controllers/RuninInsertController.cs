@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace RuninNotebookAPI.Controllers
 {
-    public class RuninLayOutController : ApiController
+    public class RuninInsertController : ApiController
     {
 
         public object MSG { get; set; }
@@ -28,9 +28,9 @@ namespace RuninNotebookAPI.Controllers
 
             try
             {
-                if (Convert.ToInt32(Columns[0]) > 0 &&  Columns[1].Contains("10.8.35") && Convert.ToInt32(Columns[2]) > 0 && (Columns[3].Contains("192.168") || Columns[3].Contains("172.168")))
+                if (Convert.ToInt32(Columns[0]) > 0 && Columns[1].Contains("10.8.35") && Convert.ToInt32(Columns[2]) > 0 && (Columns[3].Contains("192.168") || Columns[3].Contains("172.168")))
                 {
-                    ConexaoDB.CRUD_tabela($@"update Runin_LayOut  set  IP_NB='{Columns[3].ToString()}'  where idRunin_Layout={Columns[0]}");
+                    ConexaoDB.CRUD_tabela($@"update Runin_LayOut  set  IP_NB='{Columns[3].ToString()}',IP_Address='{Columns[1].ToString()}', Switch_Port='{Columns[2].ToString()}'  where idRunin_Layout={Columns[0]}");
 
                     return Json("set result=0");
                 }
@@ -44,7 +44,7 @@ namespace RuninNotebookAPI.Controllers
 
                 return Json("Problema ao gravar Runin_Layout"); ;
             }
-            
+
 
 
         }

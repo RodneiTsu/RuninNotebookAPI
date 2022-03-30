@@ -172,6 +172,7 @@
     <Compile Include="Controllers\Runin1OutController.cs" />
     <Compile Include="Controllers\Runin2InController.cs" />
     <Compile Include="Controllers\Runin2OutController.cs" />
+    <Compile Include="Controllers\RuninInsertController.cs" />
     <Compile Include="Controllers\RuninLayOutController.cs" />
     <Compile Include="Controllers\SendDataController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
