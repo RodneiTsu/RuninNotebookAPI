@@ -12,7 +12,7 @@ namespace RuninNotebookAPI.Controllers
     public class Runin2OutController : ApiController
     {
 
-        public object MSG { get; private set; }
+        public string MSG { get; set; }
 
         public int ID { get; set; }
 
@@ -46,13 +46,13 @@ namespace RuninNotebookAPI.Controllers
                 else
                 {
                     MSG = "set result=It was not possible to define a valid customer";
-                    return Json(MSG);
+                    return Ok( MSG) ;
                 }
             }
             else
             {
                 MSG = "set result=Serial number length is invalid";
-                return Json(MSG);
+                return Ok( MSG) ;
             }
 
             product.Serial_Number = Columns[0];
@@ -75,7 +75,7 @@ namespace RuninNotebookAPI.Controllers
                     else
                     {
                         MSG = "Serial-> ACER dever conter-> qtd de 22 caracters!!!!!";
-                        return Json(MSG);
+                        return Ok( MSG) ;
                     }
                 }
                 else
@@ -89,10 +89,10 @@ namespace RuninNotebookAPI.Controllers
             }
             catch (Exception)
             {
-                return Json(MSG);
+                return Ok( MSG) ;
             }
             MSG = "set result=0";
-            return Json(MSG);
+            return Ok( MSG) ;
         }
 
     }

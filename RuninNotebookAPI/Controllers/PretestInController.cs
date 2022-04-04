@@ -11,12 +11,12 @@ namespace RuninNotebookAPI.Controllers
 {
     public class PretestInController : ApiController
     {
-        public object MSG { get; private set; }
+        public string MSG { get; set; }
 
         public int ID { get; set; }
 
         [HttpGet]
-        public IHttpActionResult SFIS_GET(string ssn)
+        public dynamic GET(string ssn)
         {
             if (ssn is null)
             {
@@ -44,13 +44,13 @@ namespace RuninNotebookAPI.Controllers
                 else
                 {
                     MSG = "set result=It was not possible to define a valid customer";
-                    return Json(MSG);
+                    return Ok( MSG) ;
                 }
             }
             else
             {
                 MSG = "set result=Serial number length is invalid";
-                return Json(MSG);
+                return Ok( MSG) ;
             }
 
 
@@ -98,17 +98,18 @@ namespace RuninNotebookAPI.Controllers
                     catch (Exception)
                     { 
                         MSG = "Insert DB Product or product_movement is problem!!";
-                        return Json(MSG);
+                        return Ok( MSG) ;
                     }
                 }
                 else
                 {
                     MSG = SFIS_CHECK_STATUS.ErrorMessage;
-                    return Json(MSG);
+                    return Ok( MSG) ;
                 }
             }
             MSG = "set result=0";
-            return Ok(MSG);
+            
+            return Ok(MSG); 
         }
     }
 }

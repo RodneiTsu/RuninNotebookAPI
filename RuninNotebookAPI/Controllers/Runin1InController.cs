@@ -7,7 +7,7 @@ namespace RuninNotebookAPI.Controllers
 {
     public class Runin1InController : ApiController
     {
-        public object MSG { get; private set; }
+        public string MSG { get; set; }
 
         public int ID { get; set; }
 
@@ -39,13 +39,13 @@ namespace RuninNotebookAPI.Controllers
                 else
                 {
                     MSG = "set result=It was not possible to define a valid customer";
-                    return Json(MSG);
+                    return Ok( MSG) ;
                 }
             }
             else
             {
                 MSG = "set result=Serial number length is invalid";
-                return Json(MSG);
+                return Ok( MSG) ;
             }
 
             product_movement.Start_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -64,7 +64,7 @@ namespace RuninNotebookAPI.Controllers
             else
             {
                 MSG = "set result=Não tem entrada deste serial";
-                return Json(MSG);
+                return Ok( MSG) ;
             }
             MSG = "set result=0";
             return Ok(MSG);

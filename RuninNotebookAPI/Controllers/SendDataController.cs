@@ -3,12 +3,14 @@ using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Web.Http;
 using System.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RuninNotebookAPI.Controllers
 {
     public class SendDataController : ApiController
     {
-        public object MSG { get; private set; }
+        public string MSG { get; set; }
 
         [HttpGet]
         public IHttpActionResult Send_GET(string ssn)
@@ -41,13 +43,13 @@ namespace RuninNotebookAPI.Controllers
                 else
                 {
                     MSG = "set result=It was not possible to define a valid customer";
-                    return Json(MSG);
+                    return Ok(MSG);
                 }
             }
             else
             {
                 MSG = "set result=Serial number length is invalid";
-                return Json(MSG);
+                return Ok(MSG);
             }
 
             product.Serial_Number = Columns[0];
@@ -84,7 +86,7 @@ namespace RuninNotebookAPI.Controllers
                     else
                     {
                         MSG = $@"Campo vazio {nome}";
-                        return Json(MSG);
+                        return Ok(MSG) ;
                     }
                 }
                 pos++;
@@ -113,7 +115,7 @@ namespace RuninNotebookAPI.Controllers
                                 catch (Exception e)
                                 {
 
-                                   return Json(e.ToString()) ;
+                                   return Ok(e.ToString()) ;
                                 }
                                 
                                 i++;
@@ -136,7 +138,7 @@ namespace RuninNotebookAPI.Controllers
                                 catch (Exception e)
                                 {
 
-                                    return Json(e.ToString());
+                                    return Ok(e.ToString());
                                 }
                                 i++;
                             }
@@ -148,7 +150,7 @@ namespace RuninNotebookAPI.Controllers
                             if (temMAC>0)
                             {
                                 MSG = $@"MAC duplicado WLANMAC->{Columns[3]} ou BTMAC->{Columns[4]}";
-                                return Json(MSG);
+                                return Ok( MSG) ;
                             }
                             MSG = $@"Erro ao gravar na tabela de NBMAC";
                             string gravaWLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.WLANMAC}','{nbmac.UUID}','{product.Serial_Number}')";
@@ -168,7 +170,7 @@ namespace RuninNotebookAPI.Controllers
                     else
                     {
                         MSG = $@"WLANMAC->{nbmac.WLANMAC} ou BTMAC->{nbmac.BTMAC} ou QTD de MAC do cliente {wb.CustomerCode} sem valores";
-                        return Json(MSG);
+                        return Ok(MSG) ;
                     }
                 }
                 else if (wb.CustomerCode == "ACER")
@@ -200,7 +202,7 @@ namespace RuninNotebookAPI.Controllers
                             if (temMAC > 0)
                             {
                                 MSG = $@"MAC duplicado WLANMAC->{Columns[3]} ou BTMAC->{Columns[4]}";
-                                return Json(MSG);
+                                return Ok( MSG) ;
                             }
 
                             MSG = $@"Erro ao gravar na tabela de NBMAC";
@@ -243,7 +245,7 @@ namespace RuninNotebookAPI.Controllers
                             if (temMAC > 0)
                             {
                                 MSG = $@"MAC duplicado LANMAC->{Columns[5]}";
-                                return Json(MSG);
+                                return Ok(MSG) ;
                             }
 
                             MSG = $@"Erro ao gravar na tabela de NBMAC";
@@ -264,7 +266,7 @@ namespace RuninNotebookAPI.Controllers
                     else
                     {
                         MSG = $@"WLANMAC->{nbmac.WLANMAC} , BTMAC->{nbmac.BTMAC} , BTMAC->{nbmac.LANMAC} ou  QTD de MAC do cliente {wb.CustomerCode} sem valores";
-                        return Json(MSG);
+                        return Ok(MSG) ;
                     }
                 }
                 ConexaoDB.CRUD_tabela($@"update product set workOrder='{product.WorkOrder}', CustomerSerial='{product.CustomerSerial}', UUID='{nbmac.UUID}' where Serial_Number='{product.Serial_Number}'");
@@ -272,10 +274,10 @@ namespace RuninNotebookAPI.Controllers
             catch (Exception)
             { 
                 MSG = "erro ao gravar tabela product";
-                return Ok(MSG);
+                return Ok(MSG) ;
             }
             MSG = "set result=0";
-            return Ok(MSG);
+            return Ok(MSG) ;
         }
     }
 }

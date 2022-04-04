@@ -12,7 +12,7 @@ namespace RuninNotebookAPI.Controllers
 {
     public class CheckInfoController : ApiController
     {
-        public object MSG { get; private set; }
+        public string MSG { get; set; }
 
         [HttpGet]
         public IHttpActionResult Out_GET(string ssn)
@@ -45,13 +45,13 @@ namespace RuninNotebookAPI.Controllers
                 else
                 {
                     MSG = "set result=It was not possible to define a valid customer";
-                    return Json(MSG);
+                    return Ok(MSG);
                 }
             }
             else
             {
                 MSG = "set result=Serial number length is invalid";
-                return Json(MSG);
+                return Ok(MSG);
             }
 
             product.Serial_Number = Columns[0];
@@ -75,7 +75,7 @@ namespace RuninNotebookAPI.Controllers
                 else
                 {
                     MSG = "Serial deve ser do Produto!!!!";
-                    return Json(MSG);
+                    return Ok( MSG) ;
                 }
             }
             
@@ -94,13 +94,13 @@ namespace RuninNotebookAPI.Controllers
                             if (linha[1].ToString() != nbmac.LANMAC || linha[2].ToString() != nbmac.UUID)
                             {
                                 MSG = $@"Diferente LANMAC->{nbmac.LANMAC} ou UUID ->{nbmac.UUID}";
-                                return Json(MSG);
+                                return Ok( MSG) ;
                             }
                         }
                         else
                         {
                             MSG = $@"WLAN->{nbmac.WLANMAC} OU BTMAC->{nbmac.BTMAC} não estão vazios!!! {product.Customer} MODELO DESKTOP ";
-                            return Json(MSG);
+                            return Ok( MSG) ;
                         }
                         
                     }
@@ -109,12 +109,12 @@ namespace RuninNotebookAPI.Controllers
                         if ((l==1) && (linha[1].ToString()!=nbmac.WLANMAC) || (l == 1) && linha[2].ToString()!= nbmac.UUID)
                         {
                             MSG = $@"Diferente WLANMAC DB->{nbmac.WLANMAC} / WLANMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
-                            return Json(MSG);
+                            return Ok( MSG) ;
                         }
                         else if ((l == 2) && (linha[1].ToString() != nbmac.BTMAC) || (l == 2) && linha[2].ToString() != nbmac.UUID)
                         {
                             MSG = $@"Diferente BTMAC DB->{nbmac.BTMAC} / BTMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
-                            return Json(MSG);
+                            return Ok( MSG) ;
                         }
                     }
                     else if(i==3)
@@ -122,17 +122,17 @@ namespace RuninNotebookAPI.Controllers
                         if ((l == 1) && (linha[1].ToString() != nbmac.WLANMAC) || (l == 1) && linha[2].ToString() != nbmac.UUID)
                         {
                             MSG = $@"Diferente WLANMAC DB->{nbmac.WLANMAC} / WLANMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
-                            return Json(MSG);
+                            return Ok( MSG) ;
                         }
                         else if ((l == 2) && (linha[1].ToString() != nbmac.BTMAC) || (l == 2) && linha[2].ToString() != nbmac.UUID)
                         {
                             MSG = $@"Diferente BTMAC DB->{nbmac.BTMAC} / BTMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
-                            return Json(MSG);
+                            return Ok( MSG) ;
                         }
                         else if ((l == 3) && (linha[1].ToString() != nbmac.LANMAC) || (l == 3) && linha[2].ToString() != nbmac.UUID)
                         {
                             MSG = $@"Diferente LANMAC DB->{nbmac.LANMAC} / LANMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
-                            return Json(MSG);
+                            return Ok( MSG) ;
                         }
                     }
                     l++;
@@ -140,10 +140,10 @@ namespace RuninNotebookAPI.Controllers
             }
             catch (Exception)
             {
-                return Json(MSG);
+                return Ok( MSG) ;
             }
             MSG = "set result=0";
-            return Json(MSG);
+            return Ok( MSG) ;
         }
 
     }
