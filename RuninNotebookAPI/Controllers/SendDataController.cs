@@ -25,6 +25,7 @@ namespace RuninNotebookAPI.Controllers
             WebSFIS_GET wb = new WebSFIS_GET();
             Produto product = new Produto();
             NBMAC nbmac = new NBMAC();
+            MSG = "set result=0";
 
             if (Columns[0].Length == 15 || Columns[0].Length == 12 || Columns[0].Length == 22)
             {
@@ -59,6 +60,10 @@ namespace RuninNotebookAPI.Controllers
             nbmac.BTMAC = Columns[4];
             nbmac.LANMAC = Columns[5];
             nbmac.UUID = Columns[6];
+
+
+
+
                      
             int pos = 0;
             string nome = "";
@@ -79,9 +84,25 @@ namespace RuninNotebookAPI.Controllers
                     {
                         
                     }
-                    else if (pos==3 || pos==4 || pos==5)
+                    else if (product.CustomerSerial.Substring(0, 1) == "N" && pos ==3 )
                     {
-                        
+                        MSG = $@"Notebook {wb.CustomerCode} WLANMAC->{nbmac.WLANMAC} vazio!!!! ";
+                        return Ok(MSG);
+                    }
+                    else if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 4)
+                    {
+                        MSG = $@"Notebook {wb.CustomerCode} BTMAC->{nbmac.BTMAC} vazio!!!! ";
+                        return Ok(MSG);
+                    }
+                    else if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 5)
+                    {
+                        MSG = $@"Notebook {wb.CustomerCode} LANMAC->{nbmac.BTMAC} vazio!!!! ";
+                        return Ok(MSG);
+                    }
+                    else if (product.CustomerSerial.Substring(0,1)=="D" && pos == 5)
+                    {
+                        MSG = $@"Desktop {wb.CustomerCode} lanmac vazio!!!! ";
+                        return Ok(MSG);
                     }
                     else
                     {
@@ -153,6 +174,7 @@ namespace RuninNotebookAPI.Controllers
                                 return Ok( MSG) ;
                             }
                             MSG = $@"Erro ao gravar na tabela de NBMAC";
+
                             string gravaWLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.WLANMAC}','{nbmac.UUID}','{product.Serial_Number}')";
                             ConexaoDB.CRUD_tabela(gravaWLANMAC);
                             string gravaBTMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.BTMAC}','{nbmac.UUID}','{product.Serial_Number}')";
@@ -185,12 +207,21 @@ namespace RuninNotebookAPI.Controllers
                             int i = 1;
                             foreach (DataRow linha in MACOLD.Rows)
                             {
-                                if (i == 1)
-                                { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.WLANMAC}',UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
-                                else if (i == 2)
-                                { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.BTMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
-                                else if (i == 3)
-                                { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.LANMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
+                                try
+                                {
+                                    if (i == 1)
+                                    { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.WLANMAC}',UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
+                                    else if (i == 2)
+                                    { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.BTMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
+                                    else if (i == 3)
+                                    { ConexaoDB.CRUD_tabela($@"update nbmac SET MAC ='{nbmac.LANMAC}' ,UUID='{nbmac.UUID}' where id_mac=" + linha[0]); }
+                                }
+                                catch (Exception)
+                                {
+                                    MSG = $@"Problema com repetido  {nbmac.WLANMAC} / {nbmac.BTMAC} / {nbmac.LANMAC} ou UUID={nbmac.UUID}";
+                                    break;
+                                }
+                                
 
                                 i++;
                             }
@@ -273,10 +304,8 @@ namespace RuninNotebookAPI.Controllers
             }
             catch (Exception)
             { 
-                MSG = "erro ao gravar tabela product";
                 return Ok(MSG) ;
             }
-            MSG = "set result=0";
             return Ok(MSG) ;
         }
     }
