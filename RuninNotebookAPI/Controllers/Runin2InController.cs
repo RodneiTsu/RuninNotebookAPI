@@ -54,7 +54,12 @@ namespace RuninNotebookAPI.Controllers
 
             if (ID > 0)
             {
-                string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN2','1','{product_movement.Start_Test}','0','0')";
+
+                string  sqlposition = $@"select position from product_movement where idProduct = {ID} and WorkGroup ='RUNIN1' and Status_Code ='1'";
+
+                string position = ConexaoDB.CRUDCampo_tabela(sqlposition);
+
+                string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN2',{position},'{product_movement.Start_Test}','0','0')";
 
                 ConexaoDB.CRUD_tabela(sqlPM);
 

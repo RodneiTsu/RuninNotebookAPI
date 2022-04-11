@@ -60,10 +60,6 @@ namespace RuninNotebookAPI.Controllers
             nbmac.BTMAC = Columns[4];
             nbmac.LANMAC = Columns[5];
             nbmac.UUID = Columns[6];
-
-
-
-
                      
             int pos = 0;
             string nome = "";
