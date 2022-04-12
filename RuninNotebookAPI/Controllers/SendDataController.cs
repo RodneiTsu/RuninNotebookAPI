@@ -169,7 +169,7 @@ namespace RuninNotebookAPI.Controllers
                                 MSG = $@"MAC duplicado WLANMAC->{Columns[3]} ou BTMAC->{Columns[4]}";
                                 return Ok( MSG) ;
                             }
-                            MSG = $@"Erro ao gravar na tabela de NBMAC";
+                            
 
                             string gravaWLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.WLANMAC}','{nbmac.UUID}','{product.Serial_Number}')";
                             ConexaoDB.CRUD_tabela(gravaWLANMAC);
@@ -232,7 +232,7 @@ namespace RuninNotebookAPI.Controllers
                                 return Ok( MSG) ;
                             }
 
-                            MSG = $@"Erro ao gravar na tabela de NBMAC";
+                            
 
                             string gravaWLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.WLANMAC}','{nbmac.UUID}','{product.CustomerSerial}')";
                             ConexaoDB.CRUD_tabela(gravaWLANMAC);
@@ -275,7 +275,7 @@ namespace RuninNotebookAPI.Controllers
                                 return Ok(MSG) ;
                             }
 
-                            MSG = $@"Erro ao gravar na tabela de NBMAC";
+                            
 
                             string gravaLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.LANMAC}','{nbmac.UUID}','{product.CustomerSerial}')";
                             try
