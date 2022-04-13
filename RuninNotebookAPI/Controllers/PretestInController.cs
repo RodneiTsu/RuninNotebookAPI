@@ -79,14 +79,14 @@ namespace RuninNotebookAPI.Controllers
                     string sqlP = "INSERT INTO product(Serial_Number, SKU, Color_ID, Product, Customer, Status_Code, WorkOrder) VALUES (";
                            sqlP += $@"'{ssn.ToString().Trim()}','{wb.SKU.ToString()}','{wb.ColorCode.Trim()}','{wb.ModelName.Trim()}','{wb.CustomerCode.Trim()}','0','{wb.WorkOrder}')"; 
 
-                    string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'PRETEST','1','{product_movement.Start_Test}','0','0')";
+                    string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'PRETEST','1565','{product_movement.Start_Test}','0','0')";
                     try
                     {
                         if (ID == 0)
                         {
                             ID = ConexaoDB.CRUDU_ID_tabela(sqlP);
                             
-                            sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'PRETEST','1','{product_movement.Start_Test}','0','0')";
+                            sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'PRETEST','1565','{product_movement.Start_Test}','0','0')";
 
                             ConexaoDB.CRUD_tabela(sqlPM);
                         }
