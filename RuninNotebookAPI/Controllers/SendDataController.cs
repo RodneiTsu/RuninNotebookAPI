@@ -67,43 +67,57 @@ namespace RuninNotebookAPI.Controllers
             {
                 if (string.IsNullOrEmpty(vazio))
                 {
-                    if(pos==0)
+                    if (pos == 0)
                     { nome = "Serial_Number"; }
-                    else if(pos==1)
+                    else if (pos == 1)
                     { nome = "CustomerSerial"; }
                     else if (pos == 2)
                     { nome = "WorkOrder"; }
+                    else if (pos == 3)
+                    { nome = "WLANMAC"; }
+                    else if (pos == 4)
+                    { nome = "BTMAC"; }
+                    else if (pos == 5)
+                    { nome = "LANMAC"; }
                     else if (pos == 6)
                     { nome = "UUID"; }
 
-                    if ( wb.CustomerCode=="ASUS" && pos == 1 )
+
+                    if (wb.CustomerCode == "ASUS")
                     {
-                        
-                    }
-                    else if (product.CustomerSerial.Substring(0, 1) == "N" && pos ==3 )
-                    {
-                        MSG = $@"Notebook {wb.CustomerCode} WLANMAC->{nbmac.WLANMAC} vazio!!!! ";
-                        return Ok(MSG);
-                    }
-                    else if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 4)
-                    {
-                        MSG = $@"Notebook {wb.CustomerCode} BTMAC->{nbmac.BTMAC} vazio!!!! ";
-                        return Ok(MSG);
-                    }
-                    else if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 5)
-                    {
-                        MSG = $@"Notebook {wb.CustomerCode} LANMAC->{nbmac.BTMAC} vazio!!!! ";
-                        return Ok(MSG);
-                    }
-                    else if (product.CustomerSerial.Substring(0,1)=="D" && pos == 5)
-                    {
-                        MSG = $@"Desktop {wb.CustomerCode} lanmac vazio!!!! ";
-                        return Ok(MSG);
+                        if (pos == 0 || pos == 2 || pos == 3 || pos == 4 || pos == 6)
+                        {
+                            MSG = $@"Notebook {wb.CustomerCode} {nome} vazio!!!! ";
+                            return Ok(MSG);
+                        }
                     }
                     else
                     {
-                        MSG = $@"Campo vazio {nome}";
-                        return Ok(MSG) ;
+                        if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 3)
+                        {
+                            MSG = $@"Notebook {wb.CustomerCode} WLANMAC->{nbmac.WLANMAC} vazio!!!! ";
+                            return Ok(MSG);
+                        }
+                        else if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 4)
+                        {
+                            MSG = $@"Notebook {wb.CustomerCode} BTMAC->{nbmac.BTMAC} vazio!!!! ";
+                            return Ok(MSG);
+                        }
+                        else if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 5)
+                        {
+                            MSG = $@"Notebook {wb.CustomerCode} LANMAC->{nbmac.BTMAC} vazio!!!! ";
+                            return Ok(MSG);
+                        }
+                        else if (product.CustomerSerial.Substring(0, 1) == "D" && pos == 5)
+                        {
+                            MSG = $@"Desktop {wb.CustomerCode} lanmac vazio!!!! ";
+                            return Ok(MSG);
+                        }
+                        else if (pos == 0 || pos == 1 || pos == 2 || pos == 6)
+                        {
+                            MSG = $@"{nome} vazio!!!! ";
+                            return Ok(MSG);
+                        }
                     }
                 }
                 pos++;
@@ -180,7 +194,6 @@ namespace RuninNotebookAPI.Controllers
                             {
                                 string gravaLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.LANMAC}','{nbmac.UUID}','{product.Serial_Number}')";
                                 ConexaoDB.CRUD_tabela(gravaLANMAC);
-
                             }
 
                         }
