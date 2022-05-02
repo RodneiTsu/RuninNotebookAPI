@@ -62,7 +62,12 @@ namespace RuninNotebookAPI.Controllers
 
             string sqlmac = "";
 
+
+
+
             sqlmac = $@"select id_mac,mac,uuid,ssn,datecreate from nbmac where ssn='{product.Serial_Number}' order by ID_MAC";
+
+            
 
             if (product.Customer=="ACER")
             {
@@ -71,16 +76,27 @@ namespace RuninNotebookAPI.Controllers
                 {
                     product.CustomerSerial = ConexaoDB.CRUDCampo_tabela($@"SELECT CustomerSerial FROM product where Serial_number='{product.Serial_Number}'");
                     sqlmac = $@"select id_mac,mac,uuid,ssn,datecreate from nbmac where ssn='{product.CustomerSerial}' order by ID_MAC";
+                    if (string.IsNullOrWhiteSpace(product.CustomerSerial))
+                    {
+                        MSG = "set result=Não existe Serial do Produto!!!!";
+                        return Ok(MSG);
+                    }
                 }
                 else
                 {
-                    MSG = "Serial deve ser do Produto!!!!";
+                    MSG = "set result=Serial deve ser do Produto!!!!";
                     return Ok( MSG) ;
                 }
             }
             
             DataTable QueryResult = ConexaoDB.Carrega_Tabela(sqlmac);
             int l = 1;
+
+            if (QueryResult.Rows.Count==0)
+            {
+                MSG = "set result=Serial não existe do Produto!!!!";
+                return Ok(MSG);
+            }
 
             try
             {
