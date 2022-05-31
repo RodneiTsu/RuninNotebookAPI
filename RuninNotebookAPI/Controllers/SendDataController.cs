@@ -95,22 +95,22 @@ namespace RuninNotebookAPI.Controllers
                     {
                         if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 3)
                         {
-                            MSG = $@"set result=Notebook {wb.CustomerCode} WLANMAC->{nbmac.WLANMAC} vazio!!!! ";
+                            MSG = $@"set result=Notebook {wb.CustomerCode} WLANMAC-{nbmac.WLANMAC} vazio ";
                             return Ok(MSG);
                         }
                         else if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 4)
                         {
-                            MSG = $@"set result=Notebook {wb.CustomerCode} BTMAC->{nbmac.BTMAC} vazio!!!! ";
+                            MSG = $@"set result=Notebook {wb.CustomerCode} BTMAC-{nbmac.BTMAC} vazio ";
                             return Ok(MSG);
                         }
                         else if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 5)
                         {
-                            MSG = $@"set result=Notebook {wb.CustomerCode} LANMAC->{nbmac.BTMAC} vazio!!!! ";
+                            MSG = $@"set result=Notebook {wb.CustomerCode} LANMAC-{nbmac.BTMAC} vazio ";
                             return Ok(MSG);
                         }
                         else if (product.CustomerSerial.Substring(0, 1) == "D" && pos == 5)
                         {
-                            MSG = $@"set result=Desktop {wb.CustomerCode} lanmac vazio!!!! ";
+                            MSG = $@"set result=Desktop {wb.CustomerCode} lanmac vazio ";
                             return Ok(MSG);
                         }
                         else if (pos == 0 || pos == 1 || pos == 2 || pos == 6)
@@ -145,10 +145,8 @@ namespace RuninNotebookAPI.Controllers
                                 }
                                 catch (Exception e)
                                 {
-
                                    return Ok("set result=" + e.ToString()) ;
                                 }
-                                
                                 i++;
                             }
                         }
@@ -168,7 +166,6 @@ namespace RuninNotebookAPI.Controllers
                                 }
                                 catch (Exception e)
                                 {
-
                                     return Ok("set result ="+ e.ToString());
                                 }
                                 i++;
@@ -177,30 +174,34 @@ namespace RuninNotebookAPI.Controllers
                         else if (ASUSupdate.Rows.Count == 0)
                         {
                             sqltemMAC = $@"select count(ID_MAC) from nbmac where mac in ('{nbmac.WLANMAC}','{nbmac.BTMAC}','{nbmac.LANMAC}') order by ID_MAC";
-                            int temMAC =  ConexaoDB.CRUDValor_tabela(sqltemMAC);
+                            int temMAC = 0;
+                            try
+                            {
+                                temMAC = ConexaoDB.CRUDValor_tabela(sqltemMAC);
+                            }
+                            catch (Exception)
+                            { 
+                                return Ok("set result =Consulta quantidade de MAC" );
+                            }
                             if (temMAC>0)
                             {
-                                MSG = $@"set result=MAC duplicado WLANMAC->{Columns[3]} ou BTMAC->{Columns[4]}";
+                                MSG = $@"set result=MAC duplicado WLANMAC-{Columns[3]} ou BTMAC-{Columns[4]}";
                                 return Ok( MSG) ;
                             }
-                            
-
                             string gravaWLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.WLANMAC}','{nbmac.UUID}','{product.Serial_Number}')";
                             ConexaoDB.CRUD_tabela(gravaWLANMAC);
                             string gravaBTMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.BTMAC}','{nbmac.UUID}','{product.Serial_Number}')";
                             ConexaoDB.CRUD_tabela(gravaBTMAC);
-
                             if (!string.IsNullOrEmpty(nbmac.LANMAC))
                             {
                                 string gravaLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.LANMAC}','{nbmac.UUID}','{product.Serial_Number}')";
                                 ConexaoDB.CRUD_tabela(gravaLANMAC);
                             }
-
                         }
                     }
                     else
                     {
-                        MSG = $@"set result=WLANMAC->{nbmac.WLANMAC} ou BTMAC->{nbmac.BTMAC} ou QTD de MAC do cliente {wb.CustomerCode} sem valores";
+                        MSG = $@"set result=WLANMAC-{nbmac.WLANMAC} ou BTMAC-{nbmac.BTMAC} ou QTD de MAC do cliente {wb.CustomerCode} sem valores";
                         return Ok(MSG) ;
                     }
                 }
@@ -227,11 +228,9 @@ namespace RuninNotebookAPI.Controllers
                                 }
                                 catch (Exception)
                                 {
-                                    MSG = $@"set result=MAC duplicado WLANMAC/BTMAC/LANMAC ou UUID->{nbmac.WLANMAC} / {nbmac.BTMAC} / {nbmac.LANMAC} ou UUID={nbmac.UUID}";
+                                    MSG = $@"set result=MAC duplicado WLANMAC/BTMAC/LANMAC ou UUID-{nbmac.WLANMAC} / {nbmac.BTMAC} / {nbmac.LANMAC} ou UUID={nbmac.UUID} SSN {linha[1]}";
                                     break;
                                 }
-                                
-
                                 i++;
                             }
                         }
@@ -241,12 +240,9 @@ namespace RuninNotebookAPI.Controllers
                             int temMAC = ConexaoDB.CRUDValor_tabela(sqltemMAC);
                             if (temMAC > 0)
                             {
-                                MSG = $@"set result=MAC duplicado WLANMAC->{Columns[3]} ou BTMAC->{Columns[4]}";
+                                MSG = $@"set result=MAC duplicado WLANMAC-{Columns[3]} ou BTMAC-{Columns[4]}";
                                 return Ok(MSG) ;
                             }
-
-                            
-
                             string gravaWLANMAC = $@"INSERT INTO nbmac (MAC,UUID,SSN) VALUES ('{nbmac.WLANMAC}','{nbmac.UUID}','{product.CustomerSerial}')";
                             ConexaoDB.CRUD_tabela(gravaWLANMAC);
 
@@ -272,7 +268,6 @@ namespace RuninNotebookAPI.Controllers
                                 }
                                 catch (Exception e)
                                 {
-
                                     return Json("set result="+e.ToString());
                                 }
                                
@@ -284,7 +279,7 @@ namespace RuninNotebookAPI.Controllers
                             int temMAC = ConexaoDB.CRUDValor_tabela(sqltemMAC);
                             if (temMAC > 0)
                             {
-                                MSG = $@"set result=MAC duplicado LANMAC->{Columns[5]}";
+                                MSG = $@"set result=MAC duplicado LANMAC-{Columns[5]}";
                                 return Ok(MSG) ;
                             }
 
@@ -305,7 +300,7 @@ namespace RuninNotebookAPI.Controllers
                     }
                     else
                     {
-                        MSG = $@"set result=WLANMAC->{nbmac.WLANMAC} , BTMAC->{nbmac.BTMAC} , BTMAC->{nbmac.LANMAC} ou  QTD de MAC do cliente {wb.CustomerCode} sem valores";
+                        MSG = $@"set result=WLANMAC-{nbmac.WLANMAC} , BTMAC-{nbmac.BTMAC} , BTMAC-{nbmac.LANMAC} ou QTD de MAC do cliente {wb.CustomerCode} sem valores";
                         return Ok(MSG) ;
                     }
                 }

@@ -97,13 +97,13 @@ namespace RuninNotebookAPI.Controllers
                     }
                     catch (Exception)
                     { 
-                        MSG = "Insert DB Product or product_movement is problem!!";
+                        MSG = "set result=Insert DB Product or product_movement is problem";
                         return Ok( MSG) ;
                     }
                 }
                 else
-                {
-                    MSG = SFIS_CHECK_STATUS.ErrorMessage;
+                { 
+                    MSG = "set result=" +  SFIS_CHECK_STATUS.ErrorMessage;
                     return Ok( MSG) ;
                 }
             }

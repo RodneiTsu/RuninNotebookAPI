@@ -56,19 +56,23 @@ namespace RuninNotebookAPI.Controllers
             {
 
                 string  sqlposition = $@"select position from product_movement where idProduct = {ID} and WorkGroup ='RUNIN1' and Status_Code ='1'";
-
-                string position = ConexaoDB.CRUDCampo_tabela(sqlposition);
-
-                string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN2',{position},'{product_movement.Start_Test}','0','0')";
-
-                ConexaoDB.CRUD_tabela(sqlPM);
-
-                string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct = {ID} and WorkGroup ='RUNIN1' and Status_Code ='1'";
-                ConexaoDB.CRUD_tabela(sqlPM_pretest);
+                try
+                {
+                    MSG = "set result=Erro ao gravar banco Runin2 In";
+                    string position = ConexaoDB.CRUDCampo_tabela(sqlposition);
+                    string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN2',{position},'{product_movement.Start_Test}','0','0')";
+                    ConexaoDB.CRUD_tabela(sqlPM);
+                    string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct = {ID} and WorkGroup ='RUNIN1' and Status_Code ='1'";
+                    ConexaoDB.CRUD_tabela(sqlPM_pretest);
+                }
+                catch (Exception)
+                {
+                    return Ok(MSG);
+                }
             }
             else
             {
-                MSG = "set result=Não tem entrada deste serial";
+                MSG = "set result=Nao tem entrada deste serial";
                 return Ok( MSG) ;
             }
             MSG = "set result=0";
