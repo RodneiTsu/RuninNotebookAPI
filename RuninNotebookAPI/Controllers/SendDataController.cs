@@ -87,7 +87,7 @@ namespace RuninNotebookAPI.Controllers
                     {
                         if (pos == 0 || pos == 2 || pos == 3 || pos == 4 || pos == 6)
                         {
-                            MSG = $@"set result=Notebook {wb.CustomerCode} {nome} vazio!!!! ";
+                            MSG = $@"Notebook {wb.CustomerCode} {nome} vazio!!!! ";
                             return Ok(MSG);
                         }
                     }
@@ -95,27 +95,27 @@ namespace RuninNotebookAPI.Controllers
                     {
                         if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 3)
                         {
-                            MSG = $@"set result=Notebook {wb.CustomerCode} WLANMAC->{nbmac.WLANMAC} vazio!!!! ";
+                            MSG = $@"Notebook {wb.CustomerCode} WLANMAC->{nbmac.WLANMAC} vazio!!!! ";
                             return Ok(MSG);
                         }
                         else if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 4)
                         {
-                            MSG = $@"set result=Notebook {wb.CustomerCode} BTMAC->{nbmac.BTMAC} vazio!!!! ";
+                            MSG = $@"Notebook {wb.CustomerCode} BTMAC->{nbmac.BTMAC} vazio!!!! ";
                             return Ok(MSG);
                         }
                         else if (product.CustomerSerial.Substring(0, 1) == "N" && pos == 5)
                         {
-                            MSG = $@"set result=Notebook {wb.CustomerCode} LANMAC->{nbmac.BTMAC} vazio!!!! ";
+                            MSG = $@"Notebook {wb.CustomerCode} LANMAC->{nbmac.BTMAC} vazio!!!! ";
                             return Ok(MSG);
                         }
                         else if (product.CustomerSerial.Substring(0, 1) == "D" && pos == 5)
                         {
-                            MSG = $@"set result=Desktop {wb.CustomerCode} lanmac vazio!!!! ";
+                            MSG = $@"Desktop {wb.CustomerCode} lanmac vazio!!!! ";
                             return Ok(MSG);
                         }
                         else if (pos == 0 || pos == 1 || pos == 2 || pos == 6)
                         {
-                            MSG = $@"set result={nome} vazio!!!! ";
+                            MSG = $@"{nome} vazio!!!! ";
                             return Ok(MSG);
                         }
                     }
@@ -146,7 +146,7 @@ namespace RuninNotebookAPI.Controllers
                                 catch (Exception e)
                                 {
 
-                                   return Ok("set result=" + e.ToString()) ;
+                                   return Ok(e.ToString()) ;
                                 }
                                 
                                 i++;
@@ -169,7 +169,7 @@ namespace RuninNotebookAPI.Controllers
                                 catch (Exception e)
                                 {
 
-                                    return Ok("set result ="+ e.ToString());
+                                    return Ok(e.ToString());
                                 }
                                 i++;
                             }
@@ -180,7 +180,7 @@ namespace RuninNotebookAPI.Controllers
                             int temMAC =  ConexaoDB.CRUDValor_tabela(sqltemMAC);
                             if (temMAC>0)
                             {
-                                MSG = $@"set result=MAC duplicado WLANMAC->{Columns[3]} ou BTMAC->{Columns[4]}";
+                                MSG = $@"MAC duplicado WLANMAC->{Columns[3]} ou BTMAC->{Columns[4]}";
                                 return Ok( MSG) ;
                             }
                             
@@ -200,7 +200,7 @@ namespace RuninNotebookAPI.Controllers
                     }
                     else
                     {
-                        MSG = $@"set result=WLANMAC->{nbmac.WLANMAC} ou BTMAC->{nbmac.BTMAC} ou QTD de MAC do cliente {wb.CustomerCode} sem valores";
+                        MSG = $@"WLANMAC->{nbmac.WLANMAC} ou BTMAC->{nbmac.BTMAC} ou QTD de MAC do cliente {wb.CustomerCode} sem valores";
                         return Ok(MSG) ;
                     }
                 }
@@ -227,7 +227,7 @@ namespace RuninNotebookAPI.Controllers
                                 }
                                 catch (Exception)
                                 {
-                                    MSG = $@"set result=MAC duplicado WLANMAC/BTMAC/LANMAC ou UUID->{nbmac.WLANMAC} / {nbmac.BTMAC} / {nbmac.LANMAC} ou UUID={nbmac.UUID}";
+                                    MSG = $@"Problema com repetido  {nbmac.WLANMAC} / {nbmac.BTMAC} / {nbmac.LANMAC} ou UUID={nbmac.UUID}";
                                     break;
                                 }
                                 
@@ -241,8 +241,8 @@ namespace RuninNotebookAPI.Controllers
                             int temMAC = ConexaoDB.CRUDValor_tabela(sqltemMAC);
                             if (temMAC > 0)
                             {
-                                MSG = $@"set result=MAC duplicado WLANMAC->{Columns[3]} ou BTMAC->{Columns[4]}";
-                                return Ok(MSG) ;
+                                MSG = $@"MAC duplicado WLANMAC->{Columns[3]} ou BTMAC->{Columns[4]}";
+                                return Ok( MSG) ;
                             }
 
                             
@@ -273,7 +273,7 @@ namespace RuninNotebookAPI.Controllers
                                 catch (Exception e)
                                 {
 
-                                    return Json("set result="+e.ToString());
+                                    return Json(e.ToString());
                                 }
                                
                             }
@@ -284,7 +284,7 @@ namespace RuninNotebookAPI.Controllers
                             int temMAC = ConexaoDB.CRUDValor_tabela(sqltemMAC);
                             if (temMAC > 0)
                             {
-                                MSG = $@"set result=MAC duplicado LANMAC->{Columns[5]}";
+                                MSG = $@"MAC duplicado LANMAC->{Columns[5]}";
                                 return Ok(MSG) ;
                             }
 
@@ -298,14 +298,14 @@ namespace RuninNotebookAPI.Controllers
                             catch (Exception e)
                             {
 
-                                return Json("set result=" + e.ToString());
+                                return Json(e.ToString());
                             }
                             
                         }
                     }
                     else
                     {
-                        MSG = $@"set result=WLANMAC->{nbmac.WLANMAC} , BTMAC->{nbmac.BTMAC} , BTMAC->{nbmac.LANMAC} ou  QTD de MAC do cliente {wb.CustomerCode} sem valores";
+                        MSG = $@"WLANMAC->{nbmac.WLANMAC} , BTMAC->{nbmac.BTMAC} , BTMAC->{nbmac.LANMAC} ou  QTD de MAC do cliente {wb.CustomerCode} sem valores";
                         return Ok(MSG) ;
                     }
                 }
