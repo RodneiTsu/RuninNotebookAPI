@@ -25,7 +25,6 @@ namespace RuninNotebookAPI.Controllers
             string[] Columns = ssn.Split(',');
 
             Produto product = new Produto();
-            Produto_Movimento product_movement = new Produto_Movimento();
             NBMAC nbmac = new NBMAC();
 
             if (Columns[0].Length == 15 || Columns[0].Length == 12 || Columns[0].Length == 22)
@@ -78,13 +77,13 @@ namespace RuninNotebookAPI.Controllers
                     sqlmac = $@"select id_mac,mac,uuid,ssn,datecreate from nbmac where ssn='{product.CustomerSerial}' order by ID_MAC";
                     if (string.IsNullOrWhiteSpace(product.CustomerSerial))
                     {
-                        MSG = "set result=Não existe Serial do Produto!!!!";
+                        MSG = "set result=Nao existe Serial do Produto";
                         return Ok(MSG);
                     }
                 }
                 else
                 {
-                    MSG = "set result=Serial deve ser do Produto!!!!";
+                    MSG = "set result=Serial deve ser do Produto";
                     return Ok( MSG) ;
                 }
             }
@@ -94,7 +93,7 @@ namespace RuninNotebookAPI.Controllers
 
             if (QueryResult.Rows.Count==0)
             {
-                MSG = "set result=Serial não existe do Produto!!!!";
+                MSG = "set result=Serial nao existe do Produto";
                 return Ok(MSG);
             }
 
@@ -109,13 +108,13 @@ namespace RuninNotebookAPI.Controllers
                         {
                             if (linha[1].ToString() != nbmac.LANMAC || linha[2].ToString() != nbmac.UUID)
                             {
-                                MSG = $@"set result=Diferente LANMAC->{nbmac.LANMAC} ou UUID ->{nbmac.UUID}";
+                                MSG = $@"set result=Diferente LANMAC-{nbmac.LANMAC} ou UUID -{nbmac.UUID}";
                                 return Ok( MSG) ;
                             }
                         }
                         else
                         {
-                            MSG = $@"set result=WLAN->{nbmac.WLANMAC} OU BTMAC->{nbmac.BTMAC} não estão vazios!!! {product.Customer} MODELO DESKTOP ";
+                            MSG = $@"set result=WLAN-{nbmac.WLANMAC} OU BTMAC-{nbmac.BTMAC} nao estao vazios {product.Customer} MODELO DESKTOP ";
                             return Ok( MSG) ;
                         }
                         
@@ -124,12 +123,12 @@ namespace RuninNotebookAPI.Controllers
                     {
                         if ((l==1) && (linha[1].ToString()!=nbmac.WLANMAC) || (l == 1) && linha[2].ToString()!= nbmac.UUID)
                         {
-                            MSG = $@"set result=Diferente WLANMAC DB->{nbmac.WLANMAC} / WLANMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
+                            MSG = $@"set result=Diferente WLANMAC DB-{nbmac.WLANMAC}  WLANMAC-{linha[1].ToString()}  ou UUID DB-{nbmac.UUID}  UUID-{linha[2].ToString()}";
                             return Ok( MSG) ;
                         }
                         else if ((l == 2) && (linha[1].ToString() != nbmac.BTMAC) || (l == 2) && linha[2].ToString() != nbmac.UUID)
                         {
-                            MSG = $@"set result=Diferente BTMAC DB->{nbmac.BTMAC} / BTMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
+                            MSG = $@"set result=Diferente BTMAC DB-{nbmac.BTMAC}  BTMAC-{linha[1].ToString()}  ou UUID DB-{nbmac.UUID}  UUID-{linha[2].ToString()}";
                             return Ok( MSG) ;
                         }
                     }
@@ -137,17 +136,17 @@ namespace RuninNotebookAPI.Controllers
                     {
                         if ((l == 1) && (linha[1].ToString() != nbmac.WLANMAC) || (l == 1) && linha[2].ToString() != nbmac.UUID)
                         {
-                            MSG = $@"set result=Diferente WLANMAC DB->{nbmac.WLANMAC} / WLANMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
+                            MSG = $@"set result=Diferente WLANMAC DB-{nbmac.WLANMAC}  WLANMAC-{linha[1].ToString()}  ou UUID DB-{nbmac.UUID}  UUID-{linha[2].ToString()}";
                             return Ok( MSG) ;
                         }
                         else if ((l == 2) && (linha[1].ToString() != nbmac.BTMAC) || (l == 2) && linha[2].ToString() != nbmac.UUID)
                         {
-                            MSG = $@"set result=Diferente BTMAC DB->{nbmac.BTMAC} / BTMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
+                            MSG = $@"set result=Diferente BTMAC DB-{nbmac.BTMAC}  BTMAC-{linha[1].ToString()}  ou UUID DB-{nbmac.UUID}  UUID-{linha[2].ToString()}";
                             return Ok( MSG) ;
                         }
                         else if ((l == 3) && (linha[1].ToString() != nbmac.LANMAC) || (l == 3) && linha[2].ToString() != nbmac.UUID)
                         {
-                            MSG = $@"set result=Diferente LANMAC DB->{nbmac.LANMAC} / LANMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
+                            MSG = $@"set result=Diferente LANMAC DB-{nbmac.LANMAC} LANMAC-{linha[1].ToString()}  ou UUID DB-{nbmac.UUID}  UUID-{linha[2].ToString()}";
                             return Ok( MSG) ;
                         }
                     }

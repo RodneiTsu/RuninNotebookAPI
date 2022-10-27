@@ -74,7 +74,7 @@ namespace RuninNotebookAPI.Controllers
                     }
                     else
                     {
-                        MSG = "Serial-> ACER dever conter-> qtd de 22 caracters!!!!!";
+                        MSG = "Serial-> ACER dever conter-> qtd de 22 caracters";
                         return Ok( MSG) ;
                     }
                 }
@@ -83,9 +83,8 @@ namespace RuninNotebookAPI.Controllers
                     SQL  = $@"UPDATE product_movement set Operator_ID='OPERATOR-TEST', Error_Code='{product_movement.Error_Code}', Fail_Description='{product_movement.Fail_Description}', End_Test='{product_movement.End_Test}',Status_Code='1' ";
                     SQL += $@"WHERE idProduct = (SELECT p1.idProduct FROM product p1 where Serial_Number = '{product.Serial_Number}') AND WorkGroup = 'RUNIN2' AND Status_Code = '0' order by idProduct_Movement desc limit 1;";
                 }
-                MSG = "Erro ao gravar product_movement";
+                MSG = "Erro ao gravar product_movement Runin Out";
                 ConexaoDB.CRUD_tabela(SQL);
-
             }
             catch (Exception)
             {

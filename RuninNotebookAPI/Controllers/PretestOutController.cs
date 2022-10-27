@@ -60,7 +60,7 @@ namespace RuninNotebookAPI.Controllers
                 string SQL = $@"UPDATE product_movement set Operator_ID='{product_movement.Operator_ID}', Error_Code='{product_movement.Error_Code}', Fail_Description='{product_movement.Fail_Description}', End_Test='{product_movement.End_Test}',Status_Code='1' ";
                 SQL += $@"WHERE idProduct = (SELECT p1.idProduct FROM product p1 where Serial_Number = '{product.Serial_Number}') AND WorkGroup = 'PRETEST' AND Status_Code = '0' order by idProduct_Movement desc limit 1;";
 
-                MSG = "Erro ao gravar product_movement";
+                MSG = "set result=Erro ao gravar product_movement";
                 ConexaoDB.CRUD_tabela(SQL);
             }
             catch (Exception)

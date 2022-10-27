@@ -55,15 +55,23 @@ namespace RuninNotebookAPI.Controllers
             if (ID>0)
             {
                 string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN1','1564','{product_movement.Start_Test}','0','0')";
+                try
+                {
+                    MSG = "set result=erro ao gravar no movimento saida do Runin1";
+                    ConexaoDB.CRUD_tabela(sqlPM);
+                    MSG = "set result=erro ao gravar movimento PRETEST na saida do Runin1";
+                    string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct = {ID} and WorkGroup ='PRETEST' and Status_Code ='1'";
+                    ConexaoDB.CRUD_tabela(sqlPM_pretest);
+                }
+                catch (Exception)
+                {
+                    return Ok(MSG);
+                }
                 
-                ConexaoDB.CRUD_tabela(sqlPM);
-
-                string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct = {ID} and WorkGroup ='PRETEST' and Status_Code ='1'";
-                ConexaoDB.CRUD_tabela(sqlPM_pretest);
             }
             else
             {
-                MSG = "set result=Não tem entrada deste serial";
+                MSG = "set result=Nao tem entrada deste serial";
                 return Ok( MSG) ;
             }
             MSG = "set result=0";
