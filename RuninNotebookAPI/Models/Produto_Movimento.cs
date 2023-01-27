@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
 namespace RuninNotebookAPI.Models
@@ -18,5 +19,15 @@ namespace RuninNotebookAPI.Models
         public string Next_Station { get; set; }
         public string Station { get; set; }
         public string Station_Date { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true) ]
+        public DateTime Station_Date_PACK_QA { get; set; }
+
+
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true)]
+        public DateTime Station_Date_Palletization { get; set; }
+
     }
 }

@@ -165,7 +165,11 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Controllers\CheckInfoController.cs" />
+    <Compile Include="Controllers\CheckOSVersionController.cs" />
+    <Compile Include="Controllers\DownLoadCTROutController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\CheckStatusController.cs" />
+    <Compile Include="Controllers\DownPreInController.cs" />
     <Compile Include="Controllers\PretestInController.cs" />
     <Compile Include="Controllers\PretestOutController.cs" />
     <Compile Include="Controllers\Runin1InController.cs" />
@@ -174,16 +178,20 @@
     <Compile Include="Controllers\Runin2OutController.cs" />
     <Compile Include="Controllers\RuninInsertController.cs" />
     <Compile Include="Controllers\RuninLayOutController.cs" />
+    <Compile Include="Controllers\DownLoadCTRController.cs" />
     <Compile Include="Controllers\SendDataController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DB\ConexaoDB.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Download.cs" />
     <Compile Include="Models\NBMAC.cs" />
+    <Compile Include="Models\Product_SKU.cs" />
     <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\Produto_Movimento.cs" />
     <Compile Include="Models\Runin_LayOut.cs" />
+    <Compile Include="Models\Switch_IP_Route.cs" />
     <Compile Include="Models\WebSFIS_GET.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -237,6 +245,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <None Include="Connected Services\ServiceReference1\WebServiceTest.wsdl" />
+    <Content Include="Content\CPFL.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile1.pubxml" />

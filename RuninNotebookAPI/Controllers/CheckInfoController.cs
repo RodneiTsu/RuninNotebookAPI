@@ -13,6 +13,7 @@ namespace RuninNotebookAPI.Controllers
     public class CheckInfoController : ApiController
     {
         public string MSG { get; set; }
+        public string controller { get; set; }
 
         [HttpGet]
         public IHttpActionResult Out_GET(string ssn)
@@ -21,6 +22,7 @@ namespace RuninNotebookAPI.Controllers
             {
                 NotFound();
             }
+            controller = "CheckInfo";
 
             string[] Columns = ssn.Split(',');
 
@@ -45,12 +47,14 @@ namespace RuninNotebookAPI.Controllers
                 else
                 {
                     MSG = "set result=It was not possible to define a valid customer";
+                    ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                     return Ok(MSG);
                 }
             }
             else
             {
                 MSG = "set result=Serial number length is invalid";
+                ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                 return Ok(MSG);
             }
 
@@ -62,12 +66,7 @@ namespace RuninNotebookAPI.Controllers
 
             string sqlmac = "";
 
-
-
-
             sqlmac = $@"select id_mac,mac,uuid,ssn,datecreate from nbmac where ssn='{product.Serial_Number}' order by ID_MAC";
-
-            
 
             if (product.Customer=="ACER")
             {
@@ -79,12 +78,14 @@ namespace RuninNotebookAPI.Controllers
                     if (string.IsNullOrWhiteSpace(product.CustomerSerial))
                     {
                         MSG = "set result=Não existe Serial do Produto!!!!";
+                        ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                         return Ok(MSG);
                     }
                 }
                 else
                 {
                     MSG = "set result=Serial deve ser do Produto!!!!";
+                    ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                     return Ok( MSG) ;
                 }
             }
@@ -95,6 +96,7 @@ namespace RuninNotebookAPI.Controllers
             if (QueryResult.Rows.Count==0)
             {
                 MSG = "set result=Serial não existe do Produto!!!!";
+                ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                 return Ok(MSG);
             }
 
@@ -109,13 +111,15 @@ namespace RuninNotebookAPI.Controllers
                         {
                             if (linha[1].ToString() != nbmac.LANMAC || linha[2].ToString() != nbmac.UUID)
                             {
-                                MSG = $@"set result=Diferente LANMAC->{nbmac.LANMAC} ou UUID ->{nbmac.UUID}";
+                                MSG = $@"set result=Diferente LANMAC {nbmac.LANMAC} ou UUID -{nbmac.UUID}";
+                                ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                                 return Ok( MSG) ;
                             }
                         }
                         else
                         {
-                            MSG = $@"set result=WLAN->{nbmac.WLANMAC} OU BTMAC->{nbmac.BTMAC} não estão vazios!!! {product.Customer} MODELO DESKTOP ";
+                            MSG = $@"set result=WLAN {nbmac.WLANMAC} OU BTMAC-{nbmac.BTMAC} nao estao vazios {product.Customer} MODELO DESKTOP ";
+                            ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                             return Ok( MSG) ;
                         }
                         
@@ -124,12 +128,14 @@ namespace RuninNotebookAPI.Controllers
                     {
                         if ((l==1) && (linha[1].ToString()!=nbmac.WLANMAC) || (l == 1) && linha[2].ToString()!= nbmac.UUID)
                         {
-                            MSG = $@"set result=Diferente WLANMAC DB->{nbmac.WLANMAC} / WLANMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
+                            MSG = $@"set result=Diferente WLANMAC DB {nbmac.WLANMAC} - WLANMAC-{linha[1].ToString()}  ou UUID DB-{nbmac.UUID} - UUID-{linha[2].ToString()}";
+                            ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                             return Ok( MSG) ;
                         }
                         else if ((l == 2) && (linha[1].ToString() != nbmac.BTMAC) || (l == 2) && linha[2].ToString() != nbmac.UUID)
                         {
-                            MSG = $@"set result=Diferente BTMAC DB->{nbmac.BTMAC} / BTMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
+                            MSG = $@"set result=Diferente BTMAC DB {nbmac.BTMAC} - BTMAC-{linha[1].ToString()}  ou UUID DB-{nbmac.UUID} - UUID-{linha[2].ToString()}";
+                            ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                             return Ok( MSG) ;
                         }
                     }
@@ -137,17 +143,20 @@ namespace RuninNotebookAPI.Controllers
                     {
                         if ((l == 1) && (linha[1].ToString() != nbmac.WLANMAC) || (l == 1) && linha[2].ToString() != nbmac.UUID)
                         {
-                            MSG = $@"set result=Diferente WLANMAC DB->{nbmac.WLANMAC} / WLANMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
+                            MSG = $@"set result=Diferente WLANMAC DB {nbmac.WLANMAC} - WLANMAC-{linha[1].ToString()}  ou UUID DB-{nbmac.UUID} - UUID-{linha[2].ToString()}";
+                            ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                             return Ok( MSG) ;
                         }
                         else if ((l == 2) && (linha[1].ToString() != nbmac.BTMAC) || (l == 2) && linha[2].ToString() != nbmac.UUID)
                         {
-                            MSG = $@"set result=Diferente BTMAC DB->{nbmac.BTMAC} / BTMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
+                            MSG = $@"set result=Diferente BTMAC DB {nbmac.BTMAC} - BTMAC-{linha[1].ToString()}  ou UUID DB-{nbmac.UUID} - UUID-{linha[2].ToString()}";
+                            ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                             return Ok( MSG) ;
                         }
                         else if ((l == 3) && (linha[1].ToString() != nbmac.LANMAC) || (l == 3) && linha[2].ToString() != nbmac.UUID)
                         {
-                            MSG = $@"set result=Diferente LANMAC DB->{nbmac.LANMAC} / LANMAC->{linha[1].ToString()}  ou UUID DB->{nbmac.UUID} / UUID->{linha[2].ToString()}";
+                            MSG = $@"set result=Diferente LANMAC DB {nbmac.LANMAC} - LANMAC-{linha[1].ToString()}  ou UUID DB-{nbmac.UUID} - UUID-{linha[2].ToString()}";
+                            ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                             return Ok( MSG) ;
                         }
                     }
@@ -156,6 +165,7 @@ namespace RuninNotebookAPI.Controllers
             }
             catch (Exception)
             {
+                ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                 return Ok( MSG) ;
             }
             MSG = "set result=0";

@@ -10,7 +10,7 @@ namespace RuninNotebookAPI.Models
         public string CountryCode { get; set; }
         public string CustomerCode { get; set; }
         public string ModelName { get; set; }
-        public string DeviceUnderTestSerualNumber { get; set; }
+        public string DeviceUnderTestSerialNumber { get; set; }
         public string SKU { get; set; }
 
     }

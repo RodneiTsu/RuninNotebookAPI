@@ -8,8 +8,9 @@ namespace RuninNotebookAPI.Controllers
     public class Runin1InController : ApiController
     {
         public string MSG { get; set; }
-
         public int ID { get; set; }
+        public int PMID { get; set; }
+        public string controller { get; set; }
 
         [HttpGet]
         public IHttpActionResult IN_GET(string ssn)
@@ -18,6 +19,8 @@ namespace RuninNotebookAPI.Controllers
             {
                 NotFound();
             }
+
+            controller = "Runin1In";
 
             Produto product = new Produto();
             Produto_Movimento product_movement = new Produto_Movimento();
@@ -39,32 +42,48 @@ namespace RuninNotebookAPI.Controllers
                 else
                 {
                     MSG = "set result=It was not possible to define a valid customer";
+                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                     return Ok( MSG) ;
                 }
             }
             else
             {
                 MSG = "set result=Serial number length is invalid";
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                 return Ok( MSG) ;
             }
+
+            ssn = ssn.ToUpper();
 
             product_movement.Start_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-            ID = ConexaoDB.CRUDValor_tabela($@"SELECT idproduct FROM product WHERE Serial_Number = '{ssn.ToUpper()}'");
+            ID = ConexaoDB.CRUDValor_tabela($@"SELECT idproduct FROM product WHERE Serial_Number = '{ssn}'");
 
-            if (ID>0)
+            string sqlPM = $@"select max(idProduct_Movement) from product_movement where idProduct = {ID} and Status_Code = '1' and WorkGroup = 'PRETEST'";
+
+            if (ID<=0)
             {
-                string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN1','1564','{product_movement.Start_Test}','0','0')";
-                
-                ConexaoDB.CRUD_tabela(sqlPM);
+                MSG = "set result=Is was not record in DB - PRODUCT";
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
+                return Ok(MSG);
+            }
 
-                string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct = {ID} and WorkGroup ='PRETEST' and Status_Code ='1'";
+
+            try
+            {
+                MSG = "set result=Problem error not record PRETEST";
+                PMID = ConexaoDB.CRUDValor_tabela(sqlPM);
+                sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN1','1564','{product_movement.Start_Test}','0','0')";
+
+                ConexaoDB.CRUD_tabela(sqlPM);
+                string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct_Movement = {PMID}";
                 ConexaoDB.CRUD_tabela(sqlPM_pretest);
             }
-            else
+            catch (Exception)
             {
-                MSG = "set result=Não tem entrada deste serial";
-                return Ok( MSG) ;
+                MSG = "set result=Problem record in DB - PRODUCT";
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
+                return Ok(MSG);
             }
             MSG = "set result=0";
             return Ok(MSG);

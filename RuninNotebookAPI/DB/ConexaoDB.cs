@@ -35,7 +35,7 @@ namespace RuninNotebookAPI.DB
                 }
                 catch (MySqlException e)
                 {
-
+                    conexao.Close();
                     resposta = e.ToString();
                 }
             }
@@ -75,7 +75,7 @@ namespace RuninNotebookAPI.DB
                 }
                 catch (MySqlException)
                 {
-
+                    conexao.Close();
                     throw;
                 }
                 conexao.Close();
@@ -96,6 +96,7 @@ namespace RuninNotebookAPI.DB
                 }
                 catch (MySqlException)
                 {
+                    conexao.Close();
                     throw;
                 }
                 conexao.Close();
@@ -117,7 +118,8 @@ namespace RuninNotebookAPI.DB
                 }
                 catch (MySqlException)
                 {
-                    throw;
+                    conexao.Close();
+                    qtd =0;
                 }
                 conexao.Close();
             }
@@ -137,6 +139,7 @@ namespace RuninNotebookAPI.DB
                 }
                 catch (MySqlException)
                 {
+                    conexao.Close();
                     throw;
                 }
                 conexao.Close();

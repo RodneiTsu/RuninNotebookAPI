@@ -1,5 +1,4 @@
-﻿
-using RuninNotebookAPI.ServiceReference1;
+﻿using RuninNotebookAPI.ServiceReference1;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.ServiceModel.Channels;
@@ -9,7 +8,7 @@ using System;
 
 namespace RuninNotebookAPI.Controllers
 {
-    public class PretestInController : ApiController
+    public class DownPreInController : ApiController
     {
         public string MSG { get; set; }
 
@@ -79,15 +78,6 @@ namespace RuninNotebookAPI.Controllers
                     wb.WorkOrder = SFIS_CHECK_STATUS.Configuration.DeviceDetails[0].Value;
                     wb.SKU = SFIS_CHECK_STATUS.Configuration.Sku;
 
-
-                    //wb.ColorCode = SFIS_CHECK_STATUS.Configuration.ColorCode;
-                    //wb.CountryCode = SFIS_CHECK_STATUS.Configuration.CountryCode;
-                    //wb.DeviceUnderTestSerialNumber = SFIS_CHECK_STATUS.Configuration.DeviceUnderTestSerialNumber;
-                    //wb.ModelName = "M515DA";
-                    //wb.WorkOrder = "000080238245";
-                    //wb.SKU = "90NB0T41-M00B49";
-
-
                     product_movement.Start_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                     ID = ConexaoDB.CRUDValor_tabela($@"SELECT idproduct FROM product WHERE Serial_Number = '{ssn}'");
@@ -97,19 +87,12 @@ namespace RuninNotebookAPI.Controllers
                     string sqlP = "INSERT INTO product(Serial_Number, SKU, Color_ID, Product, Customer, Status_Code, WorkOrder) VALUES (";
                            sqlP += $@"'{ssn}','{wb.SKU}','{wb.ColorCode}','{wb.ModelName}','{wb.CustomerCode}','0','{wb.WorkOrder}')";
 
-                    
-                    string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'PRETEST','1565','{product_movement.Start_Test}','0','0')";
-
                     try
                     {
                         if (ID == 0)
                         {
                             ID = ConexaoDB.CRUDU_ID_tabela(sqlP);        
                             
-                            sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'PRETEST','1565','{product_movement.Start_Test}','0','0')";
-                            
-                            ConexaoDB.CRUD_tabela(sqlPM);
-
                             if (SKUID == 0)
                             {
                                 string sqlSKU = $@"INSERT INTO engteste.product_sku ";
@@ -119,16 +102,10 @@ namespace RuninNotebookAPI.Controllers
                                 ConexaoDB.CRUD_tabela(sqlSKU);
                             }
                         }
-                        else
-                        { 
-                            ConexaoDB.CRUD_tabela(sqlPM);
-                        }
-
-                        
                     }
                     catch (Exception)
                     { 
-                        MSG = "set result=Insert DB Product or product_movement is problem";
+                        MSG = "set result=Insert DB Product is problem";
                         ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                         return Ok(MSG) ;
                     }
