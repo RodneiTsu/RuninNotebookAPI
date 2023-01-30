@@ -58,27 +58,23 @@ namespace RuninNotebookAPI.Controllers
 
             ID = ConexaoDB.CRUDValor_tabela($@"SELECT idproduct FROM product WHERE Serial_Number = '{ssn}'");
 
-            string sqlPM = $@"select max(idProduct_Movement) from product_movement where idProduct = {ID} and Status_Code = '1' and WorkGroup = 'RUNIN1'";
-                              
-            try
-            {
-                PMID = ConexaoDB.CRUDValor_tabela(sqlPM);
-            }
-            catch (Exception)
-            {
-                MSG = "set result=Does not record in station RUNIN1 OUT";
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
-                return Ok(MSG);
-            }
-
-
             if (ID > 0)
             {
-                string vePosition = ConexaoDB.CRUDCampo_tabela($@"Select Position from product_Movement where idProduct_Movement={PMID}");
-                sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN2','{vePosition}','{product_movement.Start_Test}','0','0')";
-                ConexaoDB.CRUD_tabela(sqlPM);
-                string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct_Movement = {PMID}";
-                ConexaoDB.CRUD_tabela(sqlPM_pretest);
+
+                string  sqlposition = $@"select position from product_movement where idProduct = {ID} and WorkGroup ='RUNIN1' and Status_Code ='1'";
+                try
+                {
+                    MSG = "set result=Erro ao gravar banco Runin2 In";
+                    string position = ConexaoDB.CRUDCampo_tabela(sqlposition);
+                    string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN2',{position},'{product_movement.Start_Test}','0','0')";
+                    ConexaoDB.CRUD_tabela(sqlPM);
+                    string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct = {ID} and WorkGroup ='RUNIN1' and Status_Code ='1'";
+                    ConexaoDB.CRUD_tabela(sqlPM_pretest);
+                }
+                catch (Exception)
+                {
+                    return Ok(MSG);
+                }
             }
             else
             {
