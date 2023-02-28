@@ -1,5 +1,4 @@
-﻿
-using RuninNotebookAPI.ServiceReference1;
+﻿using RuninNotebookAPI.ServiceReference1;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.ServiceModel.Channels;
@@ -129,14 +128,14 @@ namespace RuninNotebookAPI.Controllers
                     catch (Exception)
                     { 
                         MSG = "set result=Insert DB Product or product_movement is problem";
-                        ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
+                        ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{wb.ModelName}','{MSG}','{ssn}','{controller}')");
                         return Ok(MSG) ;
                     }
                 }
                 else
                 {
                     MSG = "set result=Eror WebService" + SFIS_CHECK_STATUS.ErrorMessage;
-                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
+                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{wb.ModelName}','{MSG}','{ssn}','{controller}')");
                     return Ok(MSG) ;
                 }
             }

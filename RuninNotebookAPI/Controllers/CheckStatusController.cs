@@ -80,20 +80,20 @@ namespace RuninNotebookAPI.Controllers
                 {
                     MSG = SFIS_CHECK_STATUS.ErrorMessage;
 
+                    //"Should In : RUN-IN"
 
-                    if (SFIS_CHECK_STATUS.ErrorMessage.Contains("SHIPPACK")) {  MSG ="SHIPPACK"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("SHIPPED")) {  MSG ="set checkstatus=SHIPPED"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("PACKING1")) { MSG ="set checkstatus=PACKING1"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("PACKING2")) {  MSG ="set checkstatus=PACKING2"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("ASSIGNOOBA_SELECTED")) {  MSG ="set checkstatus=ASSIGNOOBA_SELECTED"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("PACKING3")) {  MSG ="set checkstatus=PACKING3"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("OOBA_SELECTED")) {  MSG ="set checkstatus=OOBA_SELECTED"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("ASSIGNOBE")) {  MSG ="set checkstatus=ASSIGNOBE"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("OBA")) {  MSG ="set checkstatus=OBA"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("OBE")) {  MSG ="set checkstatus=OBE"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("PALLETIZATION")) {  MSG ="set checkstatus=PALLETIZATION"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("PRETEST")) {  MSG ="set checkstatus=PRETEST"; }
-                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("RUN-IN")) {  MSG ="set checkstatus=RUN-IN"; }
+                    if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : SHIPPACK")) {  MSG = "set checkstatus=SHIPPACK"; }
+                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : SHIPPED")) {  MSG ="set checkstatus=SHIPPED"; }
+                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : PACKING1")) { MSG ="set checkstatus=PACKING1"; }
+                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : PACKING2")) {  MSG ="set checkstatus=PACKING2"; }
+                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : ASSIGNOOBA_SELECTED")) {  MSG ="set checkstatus=ASSIGNOOBA_SELECTED"; }
+                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : PACKING3")) {  MSG ="set checkstatus=PACKING3"; }
+                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : OOBA_SELECTED")) {  MSG ="set checkstatus=OOBA_SELECTED"; }
+                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : ASSIGNOBE")) {  MSG ="set checkstatus=ASSIGNOBE"; }
+                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : OBA")) {  MSG ="set checkstatus=OBA"; }
+                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : OBE")) {  MSG ="set checkstatus=OBE"; }
+                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : PALLETIZATION")) {  MSG ="set checkstatus=PALLETIZATION"; }
+                    else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : RUN-IN")) { MSG = "set checkstatus=RUN-IN"; }
                     else { MSG = "set result=" + SFIS_CHECK_STATUS.ErrorMessage; }
 
 

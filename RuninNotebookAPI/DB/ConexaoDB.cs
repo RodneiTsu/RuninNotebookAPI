@@ -96,6 +96,7 @@ namespace RuninNotebookAPI.DB
                 }
                 catch (MySqlException)
                 {
+                    qtd = 0;
                     conexao.Close();
                     throw;
                 }

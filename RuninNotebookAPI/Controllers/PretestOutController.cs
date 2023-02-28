@@ -56,7 +56,7 @@ namespace RuninNotebookAPI.Controllers
             }
 
             ID = ConexaoDB.CRUDValor_tabela($@"SELECT idproduct FROM product WHERE Serial_Number = '{Columns[0]}'");
-
+ 
             if (ID == 0)
             {
                 MSG = "set result=Serial number Not found";
@@ -64,6 +64,7 @@ namespace RuninNotebookAPI.Controllers
                 return Ok(MSG);
             }
 
+            product.Product = ConexaoDB.CRUDCampo_tabela($@"select Product from product where idProduct={ID}");
 
             string slqPM = $@"select max(pm.idProduct_Movement) ";
                   slqPM += $@"from engteste.product p inner ";
@@ -77,7 +78,7 @@ namespace RuninNotebookAPI.Controllers
             {
 
                 MSG = "set result=Serial number Not found PRETEST IN";
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Moldel,MSG,controller) values ('{ssn}','{product.Product}','{MSG}','{controller}')");
                 return Ok(MSG);
             }
             
@@ -99,7 +100,7 @@ namespace RuninNotebookAPI.Controllers
             }
             catch (Exception)
             {
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Moldel,MSG,controller) values ('{ssn}','{product.Product}','{MSG}','{controller}')");
                 return Ok( MSG) ;
             }
             MSG = "set result=0";
