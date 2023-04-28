@@ -58,6 +58,15 @@ namespace RuninNotebookAPI.Controllers
 
             ID = ConexaoDB.CRUDValor_tabela($@"SELECT idproduct FROM product WHERE Serial_Number = '{ssn}'");
 
+            string sqlPM_PRE = $@"select if(max(idProduct_Movement)>0,max(idProduct_Movement),0) from product_movement where idProduct = {ID} and Status_Code = '1' and WorkGroup = 'RUNIN1'";
+            Int32 PMID_PRE = ConexaoDB.CRUDValor_tabela(sqlPM_PRE);
+            if (PMID_PRE == 0)
+            {
+                MSG = "set result=Problema nao exista RUNIN1 fechado";
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{product.Product}','{MSG}','{ssn}','{controller}')");
+                return Ok(MSG);
+            }
+
             if (ID > 0)
             {
 

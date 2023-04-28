@@ -197,7 +197,7 @@ namespace RuninNotebookAPI.Controllers
             }
             else
             {
-                if (product.Product == "K6502ZC" || product.Product == "K6502HC" || product.Product == "K6502HC")
+                if (product.Product == "K6502ZC" || product.Product == "K6502HC" || product.Product == "K6502HC" || product.Product == "FX507ZC4")
                 { MAC_3 = true; }
                 else
                 { MAC_3 = false; }
@@ -268,7 +268,7 @@ namespace RuninNotebookAPI.Controllers
                 }
             }
 
-            if (Columns[4].ToString() != "")
+           if (Columns[4].ToString() != "")
             {
                 DataTable WLANMAC_DB = ConexaoDB.Carrega_Tabela($@"select ID_MAC, MAC, SSN, DATECREATE,ProductID from nbmac where MAC='{Columns[4]}'");
                 if (WLANMAC_DB.Rows.Count >= 0)
@@ -580,9 +580,6 @@ namespace RuninNotebookAPI.Controllers
                         return Ok(MSG) ;
                     }
                 }
-                
-                
-                
                 MSG = "set result=0";
             }
             catch (Exception)

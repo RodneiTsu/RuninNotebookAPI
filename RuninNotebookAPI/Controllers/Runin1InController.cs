@@ -71,7 +71,7 @@ namespace RuninNotebookAPI.Controllers
 
             try
             {
-                MSG = "set result=Problem error not record PRETEST";
+                MSG = "set result=Problema nao existe registro no PRETEST";
                 PMID = ConexaoDB.CRUDValor_tabela(sqlPM);
                 sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN1','1564','{product_movement.Start_Test}','0','0')";
 
@@ -81,7 +81,6 @@ namespace RuninNotebookAPI.Controllers
             }
             catch (Exception)
             {
-                MSG = "set result=Problem record in DB - PRODUCT";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
                 return Ok(MSG);
             }

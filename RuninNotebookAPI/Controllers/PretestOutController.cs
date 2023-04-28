@@ -2,6 +2,7 @@
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Web.Http;
+using System.Data;
 
 namespace RuninNotebookAPI.Controllers
 {    
@@ -55,16 +56,35 @@ namespace RuninNotebookAPI.Controllers
                 return Ok( MSG) ;
             }
 
-            ID = ConexaoDB.CRUDValor_tabela($@"SELECT idproduct FROM product WHERE Serial_Number = '{Columns[0]}'");
+            DataTable dtProduct =  ConexaoDB.Carrega_Tabela($@"SELECT * FROM product WHERE Serial_Number = '{Columns[0]}'");
  
-            if (ID == 0)
+            if (dtProduct.Rows.Count == 0)
             {
                 MSG = "set result=Serial number Not found";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                 return Ok(MSG);
             }
 
-            product.Product = ConexaoDB.CRUDCampo_tabela($@"select Product from product where idProduct={ID}");
+            foreach (DataRow lin in dtProduct.Rows)
+            {
+                product.idProduct = Convert.ToInt32(lin[0]);
+                //product.idProduct_SKU = Convert.ToInt32(lin[1]);
+                product.Serial_Number = lin[2].ToString();
+                product.CustomerSerial = lin[3].ToString();
+                product.WorkOrder = lin[4].ToString();
+                product.UUID = lin[5].ToString();
+                product.SKU = lin[6].ToString();
+                product.Color_ID = lin[7].ToString();
+                product.Product = lin[8].ToString();
+                product.Model = lin[9].ToString();
+                product.Customer = lin[10].ToString();
+                product.Status_Code = lin[11].ToString();
+                product.Dt_Creat = Convert.ToDateTime(lin[12]);
+                product.WorkOrder = lin[13].ToString();
+                product.Download = lin[14].ToString();
+            }
+
+            ID = product.idProduct;
 
             string slqPM = $@"select max(pm.idProduct_Movement) ";
                   slqPM += $@"from engteste.product p inner ";
@@ -76,22 +96,31 @@ namespace RuninNotebookAPI.Controllers
             }
             catch (Exception)
             {
-
-                MSG = "set result=Serial number Not found PRETEST IN";
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Moldel,MSG,controller) values ('{ssn}','{product.Product}','{MSG}','{controller}')");
+                int existeMov = 0;
+                try
+                {
+                    existeMov = ConexaoDB.CRUDValor_tabela($@"select MAX(PM.idProduct_Movement) from product_movement pm where PM.idProduct = {ID} and PM.Status_Code = '1' and PM.WorkGroup = 'PRETEST'");
+                    MSG = $@"set result=Existe PRETEST fechado registro-{existeMov}";
+                }
+                catch (Exception)
+                {
+                    MSG = "set result=Serial number Not found PRETEST IN";
+                }
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{product.Product}','{ssn}','{MSG}','{controller}')");
                 return Ok(MSG);
             }
             
 
-            product.Serial_Number = Columns[0];
-            product_movement.End_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            product_movement.Operator_ID = Columns[1];
-            product_movement.Error_Code = Columns[2];
-            product_movement.Fail_Description = Columns[3];
-            product_movement.Status_Code = "1";
-
             try
             {
+                MSG = "set result=Problema falta de informação SSN-ID-ErrorCode-PASS ou FAIL";
+                product.Serial_Number = Columns[0];
+                product_movement.End_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                product_movement.Operator_ID = Columns[1];
+                product_movement.Error_Code = Columns[2];
+                product_movement.Fail_Description = Columns[3];
+                product_movement.Status_Code = "1";
+
                 string SQL = $@"UPDATE product_movement set Operator_ID='{product_movement.Operator_ID}', Error_Code='{product_movement.Error_Code}', Fail_Description='{product_movement.Fail_Description}', End_Test='{product_movement.End_Test}',Status_Code='1' ";
                 SQL += $@"WHERE idProduct_Movement = {IDPM};";
 

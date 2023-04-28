@@ -85,7 +85,7 @@ namespace RuninNotebookAPI.DB
 
         public static Int32 CRUDValor_tabela(string strCRUD)
         {
-            Int32 qtd;
+            Int32 qtd = 0;
             using (MySqlConnection conexao = ConexaoDB.PegarInstacia().PegarConexao())
             {
                 MySqlCommand cmd = new MySqlCommand(strCRUD, conexao);
@@ -96,7 +96,7 @@ namespace RuninNotebookAPI.DB
                 }
                 catch (MySqlException)
                 {
-                    qtd = 0;
+                    
                     conexao.Close();
                     throw;
                 }

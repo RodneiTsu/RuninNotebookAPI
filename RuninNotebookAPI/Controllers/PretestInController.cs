@@ -104,17 +104,13 @@ namespace RuninNotebookAPI.Controllers
                         if (ID == 0)
                         {
                             ID = ConexaoDB.CRUDU_ID_tabela(sqlP);        
-                            
                             sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'PRETEST','1565','{product_movement.Start_Test}','0','0')";
-                            
                             ConexaoDB.CRUD_tabela(sqlPM);
-
                             if (SKUID == 0)
                             {
                                 string sqlSKU = $@"INSERT INTO engteste.product_sku ";
-                                sqlSKU += $@"(Product,SKU,Customer,UPH,Display,OSVersion,OSVersion_OLD,DtCreate)";
-                                sqlSKU += $@" VALUES ('{wb.ModelName}','{wb.SKU}','{wb.CustomerCode}',NULL,0,NULL,NULL,'{product_movement.Start_Test}')";
-
+                                sqlSKU += $@"(Product,SKU,Customer,UPH,Display,OSVersion,DtCreate)";
+                                sqlSKU += $@" VALUES ('{wb.ModelName}','{wb.SKU}','{wb.CustomerCode}',9,0,NULL,'{product_movement.Start_Test}')";
                                 ConexaoDB.CRUD_tabela(sqlSKU);
                             }
                         }
@@ -122,8 +118,6 @@ namespace RuninNotebookAPI.Controllers
                         { 
                             ConexaoDB.CRUD_tabela(sqlPM);
                         }
-
-                        
                     }
                     catch (Exception)
                     { 

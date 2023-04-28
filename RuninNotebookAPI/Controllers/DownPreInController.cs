@@ -25,6 +25,7 @@ namespace RuninNotebookAPI.Controllers
             {
                 NotFound();
             }
+            controller = "DownPreIn";
 
             WebSFIS_GET wb = new WebSFIS_GET();
             Produto product = new Produto();
@@ -91,29 +92,32 @@ namespace RuninNotebookAPI.Controllers
                     {
                         if (ID == 0)
                         {
-                            ID = ConexaoDB.CRUDU_ID_tabela(sqlP);        
-                            
+                            MSG = "Ok Gravacao de Product";
+                            ID = ConexaoDB.CRUDU_ID_tabela(sqlP);
+                            ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{wb.ModelName}','{ssn}','{MSG}','{controller}')");
+
                             if (SKUID == 0)
                             {
                                 string sqlSKU = $@"INSERT INTO engteste.product_sku ";
-                                sqlSKU += $@"(Product,SKU,Customer,UPH,Display,OSVersion,OSVersion_OLD,DtCreate)";
-                                sqlSKU += $@" VALUES ('{wb.ModelName}','{wb.SKU}','{wb.CustomerCode}',NULL,0,NULL,NULL,'{product_movement.Start_Test}')";
+                                sqlSKU += $@"(Product,SKU,Customer,UPH,Display,OSVersion,DtCreate)";
+                                sqlSKU += $@" VALUES ('{wb.ModelName}','{wb.SKU}','{wb.CustomerCode}',9,0,NULL,'{product_movement.Start_Test}')";
 
                                 ConexaoDB.CRUD_tabela(sqlSKU);
+                               
                             }
                         }
                     }
                     catch (Exception)
                     { 
                         MSG = "set result=Insert DB Product is problem";
-                        ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
+                        ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{wb.ModelName}','{ssn}','{MSG}','{controller}')");
                         return Ok(MSG) ;
                     }
                 }
                 else
                 {
                     MSG = "set result=Eror WebService" + SFIS_CHECK_STATUS.ErrorMessage;
-                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
+                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{wb.ModelName}','{ssn}','{MSG}','{controller}')");
                     return Ok(MSG) ;
                 }
             }
