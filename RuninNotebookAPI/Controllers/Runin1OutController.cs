@@ -107,6 +107,13 @@ namespace RuninNotebookAPI.Controllers
                 ConexaoDB.CRUD_tabela($@"update product_movement set next_Station='1' where idProduct_Movement = {PMID_PRE}");
             }
 
+            if (ConexaoDB.CRUDCampo_tabela($@"Select Fail_Description from product_Movement where idProduct_Movement={PMID}") == "PASS")
+            {
+                MSG = $@"set result=ja existe RUNIN1 fechado idPM={PMID}";
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{product.Product}','{product.Serial_Number}','{MSG}','{controller}')");
+                return Ok(MSG);
+            }
+
             try
             {
                 string SQL = $@"UPDATE product_movement set Operator_ID='{product_movement.Operator_ID}', Error_Code='{product_movement.Error_Code}', Fail_Description='{product_movement.Fail_Description}', End_Test='{product_movement.End_Test}',Status_Code='1' ";

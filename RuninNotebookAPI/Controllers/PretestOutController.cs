@@ -89,7 +89,7 @@ namespace RuninNotebookAPI.Controllers
             string slqPM = $@"select max(pm.idProduct_Movement) ";
                   slqPM += $@"from engteste.product p inner ";
                   slqPM += $@"join engteste.product_movement pm on p.idProduct = pm.idProduct ";
-                  slqPM += $@"where p.idProduct = {ID} and pm.Status_Code = '0' and pm.WorkGroup = 'PRETEST'";
+                  slqPM += $@"where p.idProduct = {ID} and pm.WorkGroup = 'PRETEST'";
             try
             {
                 IDPM = ConexaoDB.CRUDValor_tabela(slqPM);
@@ -110,6 +110,12 @@ namespace RuninNotebookAPI.Controllers
                 return Ok(MSG);
             }
             
+            if (ConexaoDB.CRUDCampo_tabela($@"Select Fail_Description from product_Movement where idProduct_Movement={IDPM}")=="PASS")
+            {
+                MSG = $@"set result=ja existe prestet fechado idPM={IDPM}";
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{product.Product}','{product.Serial_Number}','{MSG}','{controller}')");
+                return Ok(MSG);
+            }
 
             try
             {

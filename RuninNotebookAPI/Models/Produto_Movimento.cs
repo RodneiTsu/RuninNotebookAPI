@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Collections.Generic;
 
 namespace RuninNotebookAPI.Models
@@ -30,4 +31,5 @@ namespace RuninNotebookAPI.Models
         public DateTime Station_Date_Palletization { get; set; }
 
     }
+
 }

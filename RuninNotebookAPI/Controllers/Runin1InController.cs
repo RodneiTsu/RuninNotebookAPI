@@ -75,6 +75,7 @@ namespace RuninNotebookAPI.Controllers
                 PMID = ConexaoDB.CRUDValor_tabela(sqlPM);
                 sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN1','1564','{product_movement.Start_Test}','0','0')";
 
+                MSG = $@"set result=Problema na inclusao do registro RUNIN1 idProduct {ID}";
                 ConexaoDB.CRUD_tabela(sqlPM);
                 string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct_Movement = {PMID}";
                 ConexaoDB.CRUD_tabela(sqlPM_pretest);
