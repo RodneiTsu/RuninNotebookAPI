@@ -2,6 +2,7 @@
 using System.Web.Http;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
+using System.Data;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -55,9 +56,36 @@ namespace RuninNotebookAPI.Controllers
 
             ssn = ssn.ToUpper();
 
-            product_movement.Start_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            DataTable dtProduct = ConexaoDB.Carrega_Tabela($@"SELECT * FROM product WHERE Serial_Number = '{ssn}'");
 
-            ID = ConexaoDB.CRUDValor_tabela($@"SELECT idproduct FROM product WHERE Serial_Number = '{ssn}'");
+            if (dtProduct.Rows.Count == 0)
+            {
+                MSG = "set result=Serial number Not found";
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
+                return Ok(MSG);
+            }
+
+            foreach (DataRow lin in dtProduct.Rows)
+            {
+                product.idProduct = Convert.ToInt32(lin[0]);
+                product.Serial_Number = lin[2].ToString();
+                product.CustomerSerial = lin[3].ToString();
+                product.WorkOrder = lin[4].ToString();
+                product.UUID = lin[5].ToString();
+                product.SKU = lin[6].ToString();
+                product.Color_ID = lin[7].ToString();
+                product.Product = lin[8].ToString();
+                product.Model = lin[9].ToString();
+                product.Customer = lin[10].ToString();
+                product.Status_Code = lin[11].ToString();
+                product.Dt_Creat = Convert.ToDateTime(lin[12]);
+                product.WorkOrder = lin[13].ToString();
+                product.Download = lin[14].ToString();
+            }
+
+            ID = product.idProduct;
+
+            product_movement.Start_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             string sqlPM = $@"select max(idProduct_Movement) from product_movement where idProduct = {ID} and Status_Code = '1' and WorkGroup = 'PRETEST'";
 
@@ -67,7 +95,6 @@ namespace RuninNotebookAPI.Controllers
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
                 return Ok(MSG);
             }
-
 
             try
             {
