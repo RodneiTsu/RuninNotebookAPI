@@ -76,7 +76,6 @@ namespace RuninNotebookAPI.Controllers
                 foreach (DataRow lin in productDT.Rows)
                 {
                     product.idProduct = Convert.ToInt32(lin[0]);
-                    //product.idProduct_SKU = Convert.ToInt32(lin[1]);
                     product.Serial_Number = lin[2].ToString();
                     product.CustomerSerial = lin[3].ToString();
                     product.WorkOrder = lin[4].ToString();
@@ -128,14 +127,14 @@ namespace RuninNotebookAPI.Controllers
                 if (PMID==0)
                 {
                     MSG = "set result=SERIAL NUMBER did not find any in  RUNIN2 IN";
-                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
+                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','{MSG}','{product.Product}','{product.Serial_Number}','{controller}')");
                     return Ok(MSG);
                 }
             }
             catch (Exception)
             {
                 MSG = "set result=SERIAL NUMBER did not find any in  RUNIN2 IN - exception";
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','{MSG}','{product.Product}','{product.Serial_Number}','{controller}')");
                 return Ok(MSG);
             }
 
@@ -167,7 +166,7 @@ namespace RuninNotebookAPI.Controllers
                 }
                 catch (Exception)
                 {
-                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
+                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','{MSG}','{product.Product}','{product.Serial_Number}','{controller}')");
                     return Ok(MSG);
                 }
             }

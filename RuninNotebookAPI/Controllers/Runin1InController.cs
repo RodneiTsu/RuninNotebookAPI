@@ -92,7 +92,7 @@ namespace RuninNotebookAPI.Controllers
             if (ID<=0)
             {
                 MSG = "set result=Is was not record in DB - PRODUCT";
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{product.Product}','{MSG}','{ssn}','{controller}')");
                 return Ok(MSG);
             }
 
@@ -109,7 +109,7 @@ namespace RuninNotebookAPI.Controllers
             }
             catch (Exception)
             {
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{product.Product}','{MSG}','{ssn}','{controller}')");
                 return Ok(MSG);
             }
             MSG = "set result=0";

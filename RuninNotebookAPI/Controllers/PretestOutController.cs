@@ -106,7 +106,7 @@ namespace RuninNotebookAPI.Controllers
                 {
                     MSG = "set result=Serial number Not found PRETEST IN";
                 }
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{product.Product}','{ssn}','{MSG}','{controller}')");
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{product.Product}','{product.Serial_Number}','{MSG}','{controller}')");
                 return Ok(MSG);
             }
             
@@ -135,7 +135,7 @@ namespace RuninNotebookAPI.Controllers
             }
             catch (Exception)
             {
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Moldel,MSG,controller) values ('{ssn}','{product.Product}','{MSG}','{controller}')");
+                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{product.Product}','{product.Serial_Number}','{MSG}','{controller}')");
                 return Ok( MSG) ;
             }
             MSG = "set result=0";
