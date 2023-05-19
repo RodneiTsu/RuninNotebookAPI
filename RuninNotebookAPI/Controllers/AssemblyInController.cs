@@ -8,12 +8,10 @@ using System;
 
 namespace RuninNotebookAPI.Controllers
 {
-    public class DownPreInController : ApiController
+    public class AssemblyInController : ApiController
     {
         public string MSG { get; set; }
-
         public int ID { get; set; }
-
         public int SKUID { get; set; }
         public int LOGID { get; set; }
         public string controller { get; set; }
@@ -25,41 +23,46 @@ namespace RuninNotebookAPI.Controllers
             {
                 NotFound();
             }
-            controller = "DownPreIn";
 
             WebSFIS_GET wb = new WebSFIS_GET();
-            
+           
             Produto_Movimento product_movement = new Produto_Movimento();
+            controller = "ASSEMBLY1";
+            string[] Columns = ssn.Split(',');
 
-            if (ssn.Length == 15 || ssn.Length == 12 || ssn.Length == 22)
+            Columns[0] = Columns[0].ToString().ToUpper();
+            Columns[1] = Columns[1].ToString().ToUpper();
+
+            if (Columns[0].Length == 15 || Columns[0].Length == 12 || Columns[0].Length == 22)
             {
-                if (ssn.ToUpper().ToString().ToUpper().Substring(4, 2) == "B6")
+                if (Columns[0].Substring(4, 2) == "B6")
                 {
                     wb.CustomerCode = "ASUS";
                 }
-                else if (ssn.ToUpper().ToString().ToUpper().Substring(9, 3) == "935" || ssn.Length == 22)
+                else if (Columns[0].Substring(9, 3) == "935" || Columns[0].Length == 22)
                 {
                     wb.CustomerCode = "ACER";
                 }
-                else if (ssn.ToUpper().ToString().ToUpper().Substring(10, 2) == "TL")
+                else if (Columns[0].Substring(10, 2) == "TL")
                 {
                     wb.CustomerCode = "HUAWEI";
                 }
                 else
                 {
-                    MSG = "set result=Validacao do serial esta incorreto com Customer";
+                    MSG = "set result=Nao e possivel validar serial number com customer";
                     ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                     return Ok( MSG) ;
                 }
             }
             else
             {
-                MSG = "set result=Serializacao nao esta correto provalvel tamanho";
+                MSG = "set result=Validacao de Serial Number incorreto ou tamanho invalido";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                 return Ok( MSG) ;
             }
 
-            ssn = ssn.ToString().ToUpper();
+           
+            Produto product = new Produto(Columns[0]);
 
             HttpRequestMessageProperty customerHeader = new HttpRequestMessageProperty();
             WebServiceTestSoapClient client = new WebServiceTestSoapClient("WebServiceTestSoap");
@@ -68,7 +71,7 @@ namespace RuninNotebookAPI.Controllers
             using (new OperationContextScope(client.InnerChannel))
             {
                 OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = customerHeader;
-                var SFIS_CHECK_STATUS = client.SFIS_GET_DATA(ssn);
+                var SFIS_CHECK_STATUS = client.SFIS_GET_DATA(Columns[0]);
 
                 if (SFIS_CHECK_STATUS.StatusCode=="0")
                 {
@@ -79,47 +82,56 @@ namespace RuninNotebookAPI.Controllers
                     wb.WorkOrder = SFIS_CHECK_STATUS.Configuration.DeviceDetails[0].Value;
                     wb.SKU = SFIS_CHECK_STATUS.Configuration.Sku;
 
+                    //wb.ColorCode = SFIS_CHECK_STATUS.Configuration.ColorCode;
+                    //wb.CountryCode = SFIS_CHECK_STATUS.Configuration.CountryCode;
+                    //wb.DeviceUnderTestSerialNumber = SFIS_CHECK_STATUS.Configuration.DeviceUnderTestSerialNumber;
+                    //wb.ModelName = "M515DA";
+                    //wb.WorkOrder = "000080238245";
+                    //wb.SKU = "90NB0T41-M00B49";
+
                     product_movement.Start_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-                    Produto product = new Produto(ssn);
 
                     ID = product.ID;
-
+                    
                     SKUID = ConexaoDB.CRUDValor_tabela($@"select id from product_sku where sku='{wb.SKU}'");
 
-                    string sqlP  = "INSERT INTO product(Serial_Number, SKU, Color_ID, Product, Customer, Status_Code, WorkOrder) VALUES (";
-                           sqlP += $@"'{ssn}','{wb.SKU}','{wb.ColorCode}','{wb.ModelName}','{wb.CustomerCode}','0','{wb.WorkOrder}')";
+                    string sqlP = "INSERT INTO product(Serial_Number, SKU, Color_ID, Product, Customer, Status_Code, WorkOrder) VALUES (";
+                           sqlP += $@"'{Columns[0]}','{wb.SKU}','{wb.ColorCode}','{wb.ModelName}','{wb.CustomerCode}','0','{wb.WorkOrder}')";
+
+                    string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station,ProductLine) values ({ID},'ASSEMBLY1','1567','{product_movement.Start_Test}','0','0','{Columns[1]}')";
 
                     try
                     {
                         if (ID == 0)
                         {
-                            MSG = "Ok Gravacao de Product";
-                            ID = ConexaoDB.CRUDU_ID_tabela(sqlP);
-                            ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{wb.ModelName}','{ssn}','{MSG}','{controller}')");
-
+                            ID = ConexaoDB.CRUDU_ID_tabela(sqlP);        
+                            sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station,ProductLine) values ({ID},'ASSEMBLY1','1567','{product_movement.Start_Test}','0','0','{Columns[1]}')";
+                            ConexaoDB.CRUD_tabela(sqlPM);
                             if (SKUID == 0)
                             {
                                 string sqlSKU = $@"INSERT INTO engteste.product_sku ";
-                                      sqlSKU += $@"(Product,SKU,Customer,UPH,Display,OSVersion,DtCreate)";
-                                      sqlSKU += $@" VALUES ('{wb.ModelName}','{wb.SKU}','{wb.CustomerCode}',9,0,NULL,'{product_movement.Start_Test}')";
-
+                                sqlSKU += $@"(Product,SKU,Customer,UPH,Display,OSVersion,DtCreate)";
+                                sqlSKU += $@" VALUES ('{wb.ModelName}','{wb.SKU}','{wb.CustomerCode}',9,0,NULL,'{product_movement.Start_Test}')";
                                 ConexaoDB.CRUD_tabela(sqlSKU);
-                               
                             }
+                        }
+                        else
+                        { 
+                            ConexaoDB.CRUD_tabela(sqlPM);
                         }
                     }
                     catch (Exception)
                     { 
-                        MSG = "set result=Problema ao gravar DB LogRuninNb";
-                        ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{wb.ModelName}','{ssn}','{MSG}','{controller}')");
+                        MSG = "set result=Problema ao criar DB LogRuninNb";
+                        ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{wb.ModelName}','{MSG}','{Columns[0]}','{controller}')");
                         return Ok(MSG) ;
                     }
                 }
                 else
                 {
-                    MSG = "set result=Erro WebService" + SFIS_CHECK_STATUS.ErrorMessage;
-                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{wb.ModelName}','{ssn}','{MSG}','{controller}')");
+                    MSG = "set result=Error WebService" + SFIS_CHECK_STATUS.ErrorMessage;
+                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{wb.ModelName}','{MSG}','{Columns[0]}','{controller}')");
                     return Ok(MSG) ;
                 }
             }

@@ -96,9 +96,6 @@ namespace RuninNotebookAPI.Controllers
                     else if (SFIS_CHECK_STATUS.ErrorMessage.Contains("Should In : RUN-IN")) { MSG = "set checkstatus=RUN-IN"; }
                     else { MSG = "set result=" + SFIS_CHECK_STATUS.ErrorMessage; }
 
-
-
-                    
                     return Ok(MSG) ;
                 }
             }

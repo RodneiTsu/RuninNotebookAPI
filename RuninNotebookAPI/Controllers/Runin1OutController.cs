@@ -25,22 +25,14 @@ namespace RuninNotebookAPI.Controllers
             string[] Columns = ssn.Split(',');
             MSG = "set result=0";
 
-            Produto product = new Produto();
+            
             Produto_Movimento product_movement = new Produto_Movimento();
 
             if (Columns[0].Length == 15 || Columns[0].Length == 12 || Columns[0].Length == 22)
             {
-                if (Columns[0].ToUpper().ToString().ToUpper().Substring(4, 2) == "B6")
+                if (ssn.Substring(4, 2) == "B6" || ssn.Substring(9, 3) == "935")
                 {
-                    product.Customer = "ASUS";
-                }
-                else if (Columns[0].ToUpper().ToString().ToUpper().Substring(9, 3) == "935" || Columns[0].Length == 22)
-                {
-                    product.Customer = "ACER";
-                }
-                else if (Columns[0].ToUpper().ToString().ToUpper().Substring(10, 2) == "TL")
-                {
-                    product.Customer = "HUAWEI";
+                    MSG = "set result=0";
                 }
                 else
                 {
@@ -56,35 +48,18 @@ namespace RuninNotebookAPI.Controllers
                 return Ok( MSG) ;
             }
 
-            DataTable dtProduct = ConexaoDB.Carrega_Tabela($@"SELECT * FROM product WHERE Serial_Number = '{Columns[0].ToUpper()}'");
+            Columns[0] = Columns[0].ToUpper();
 
-            if (dtProduct.Rows.Count == 0)
+            Produto product = new Produto(Columns[0]);
+
+            ID = product.ID;
+
+            if (ID == 0)
             {
-                MSG = "set result=Serial number Not found";
+                MSG = "set result=Serial Number nao encontrado no DB tabela Product";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                 return Ok(MSG);
             }
-
-            foreach (DataRow lin in dtProduct.Rows)
-            {
-                product.idProduct = Convert.ToInt32(lin[0]);
-                //product.idProduct_SKU = Convert.ToInt32(lin[1]);
-                product.Serial_Number = lin[2].ToString();
-                product.CustomerSerial = lin[3].ToString();
-                product.WorkOrder = lin[4].ToString();
-                product.UUID = lin[5].ToString();
-                product.SKU = lin[6].ToString();
-                product.Color_ID = lin[7].ToString();
-                product.Product = lin[8].ToString();
-                product.Model = lin[9].ToString();
-                product.Customer = lin[10].ToString();
-                product.Status_Code = lin[11].ToString();
-                product.Dt_Creat = Convert.ToDateTime(lin[12]);
-                product.WorkOrder = lin[13].ToString();
-                product.Download = lin[14].ToString();
-            }
-
-            ID = product.idProduct;
 
             product.Serial_Number = Columns[0];
             product_movement.Start_Test = DateTime.Now.AddMinutes(-30).ToString("yyyy-MM-dd HH:mm:ss");
@@ -94,36 +69,15 @@ namespace RuninNotebookAPI.Controllers
             product_movement.Fail_Description = Columns[3];
             product_movement.Status_Code = "1";
 
-            if (ID==0)
-            {
-                MSG = "set result=Serial number not found Data Base";
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
-                return Ok(MSG);
-            }
-
-            //return Ok(MSG);
-
-            string sqlPM = $@"select if(max(idProduct_Movement)>0,max(idProduct_Movement),0) from product_movement where idProduct = {ID} AND WorkGroup = 'RUNIN1';";
-
-            string sqlPM_PRE = $@"select if(max(idProduct_Movement)>0,max(idProduct_Movement),0) from product_movement where idProduct = {ID} and Status_Code = '1' and WorkGroup = 'PRETEST'";
+            string sqlPM = $@"select if(max(idProduct_Movement)>0,max(idProduct_Movement),0) from product_movement where idProduct = {ID} AND WorkGroup = 'RUNIN1'";
 
             try
             {
                 PMID = ConexaoDB.CRUDValor_tabela(sqlPM);
             }
             catch (Exception)
-            {
-                product.Product = ConexaoDB.CRUDCampo_tabela("select Product from product where idProduct={ID}");
-                MSG = "set result=Insert DB Product or product_movement is problem";
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{product.Product}','{MSG}','{ssn}','{controller}')");
-                return Ok(MSG);
-            }
-
-            Int32 PMID_PRE = ConexaoDB.CRUDValor_tabela(sqlPM_PRE);
-
-            if (PMID_PRE == 0)
-            {
-                MSG = "set result=Problema nao exista PRETEST fechado";
+            { 
+                MSG = "set result=Problema nao existe  RUNIN1 IN ";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{product.Product}','{MSG}','{ssn}','{controller}')");
                 return Ok(MSG);
             }
@@ -133,7 +87,7 @@ namespace RuninNotebookAPI.Controllers
                 product_movement.Operator_ID = "OPERADOR-TESTE";
                 string sqlPM_Insert = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN1','1564','{product_movement.Start_Test}','0','0')";
                 PMID = ConexaoDB.CRUDU_ID_tabela(sqlPM_Insert);         
-                ConexaoDB.CRUD_tabela($@"update product_movement set next_Station='1' where idProduct_Movement = {PMID_PRE}");
+                ConexaoDB.CRUD_tabela($@"update product_movement set next_Station='1' where idProduct_Movement = {PMID}");
             }
 
             if (ConexaoDB.CRUDCampo_tabela($@"Select Fail_Description from product_Movement where idProduct_Movement={PMID}") == "PASS")

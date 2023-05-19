@@ -1,5 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
+using RuninNotebookAPI.DB;
+
 
 namespace RuninNotebookAPI.Models
 {
@@ -40,6 +43,55 @@ namespace RuninNotebookAPI.Models
         public bool BTMAC { get; set; }
         public bool LANMAC { get; set; }
         
+        public int ID { get; set; }
+        public Produto()
+        {}
+
+        public  Produto(string SSN)
+        {
+            DataTable dtProduct =  ConexaoDB.Carrega_Tabela($@"select * from Product where Serial_Number='{SSN}'");
+            if (dtProduct.Rows.Count > 0)
+            {
+                foreach (DataRow lin in dtProduct.Rows)
+                {
+                    ID= Convert.ToInt32(lin[0]);
+                    idProduct = Convert.ToInt32(lin[0]);
+                    //product.idProduct_SKU = Convert.ToInt32(lin[1]);
+                    Serial_Number = lin[2].ToString();
+                    CustomerSerial = lin[3].ToString();
+                    WorkOrder = lin[4].ToString();
+                    UUID = lin[5].ToString();
+                    SKU = lin[6].ToString();
+                    Color_ID = lin[7].ToString();
+                    Product = lin[8].ToString();
+                    Model = lin[9].ToString();
+                    Customer = lin[10].ToString();
+                    Status_Code = lin[11].ToString();
+                    Dt_Creat = Convert.ToDateTime(lin[12]);
+                    WorkOrder = lin[13].ToString();
+                    Download = lin[14].ToString();
+                    if (lin[15].ToString() != "")
+                    {
+                        Dt_GetIn = Convert.ToDateTime(lin[15]);
+                    }
+                    if (lin[16].ToString() != "")
+                    {
+                        Dt_GetOut = Convert.ToDateTime(lin[16]);
+                    }
+                    if (Convert.ToInt32(lin[17]) > 0)
+                    {
+                        idSwitch = Convert.ToInt32(lin[17]);
+                    }
+                    S_60 = lin[18].ToString();
+                    S_MBSN = lin[19].ToString();
+                }
+            }
+            else
+            {
+                ID = 0;
+            }
+        
+        }
 
     }
 }

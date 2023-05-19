@@ -3,8 +3,6 @@ using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Web.Http;
 using System.Data;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -30,7 +28,6 @@ namespace RuninNotebookAPI.Controllers
             Produto product = new Produto();
             NBMAC nbmac = new NBMAC();
             Switch_IP_Route IPSwitch = new Switch_IP_Route();
-
 
             MSG = "set result=0";
 
@@ -113,9 +110,6 @@ namespace RuninNotebookAPI.Controllers
                 product.S_60 = lin[18].ToString();
                 product.S_MBSN = lin[19].ToString();
             }
-         
-            int pos = 0;
-            string nome = "";
 
             //======================================================================================================================================
 

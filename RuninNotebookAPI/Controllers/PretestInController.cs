@@ -11,9 +11,7 @@ namespace RuninNotebookAPI.Controllers
     public class PretestInController : ApiController
     {
         public string MSG { get; set; }
-
         public int ID { get; set; }
-
         public int SKUID { get; set; }
         public int LOGID { get; set; }
         public string controller { get; set; }
@@ -25,10 +23,10 @@ namespace RuninNotebookAPI.Controllers
             {
                 NotFound();
             }
-
+            
             WebSFIS_GET wb = new WebSFIS_GET();
-            Produto product = new Produto();
             Produto_Movimento product_movement = new Produto_Movimento();
+            
 
             if (ssn.Length == 15 || ssn.Length == 12 || ssn.Length == 22)
             {
@@ -46,14 +44,14 @@ namespace RuninNotebookAPI.Controllers
                 }
                 else
                 {
-                    MSG = "set result=It was not possible to define a valid customer";
+                    MSG = "set result=Nao e possivel validar serial number com customer";
                     ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                     return Ok( MSG) ;
                 }
             }
             else
             {
-                MSG = "set result=Serial number length is invalid";
+                MSG = "set result=Validacao de Serial Number incorreto ou tamanho invalido";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                 return Ok( MSG) ;
             }
@@ -87,7 +85,8 @@ namespace RuninNotebookAPI.Controllers
 
                     product_movement.Start_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-                    ID = ConexaoDB.CRUDValor_tabela($@"SELECT idproduct FROM product WHERE Serial_Number = '{ssn}'");
+                    Produto product = new Produto(ssn);
+                    ID = product.ID;
 
                     SKUID = ConexaoDB.CRUDValor_tabela($@"select id from product_sku where sku='{wb.SKU}'");
 
@@ -118,14 +117,14 @@ namespace RuninNotebookAPI.Controllers
                     }
                     catch (Exception)
                     { 
-                        MSG = "set result=Insert DB Product or product_movement is problem";
+                        MSG = "set result=Problema ao criar DB LogRuninNb";
                         ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{wb.ModelName}','{MSG}','{ssn}','{controller}')");
                         return Ok(MSG) ;
                     }
                 }
                 else
                 {
-                    MSG = "set result=Eror WebService" + SFIS_CHECK_STATUS.ErrorMessage;
+                    MSG = "set result=Error WebService" + SFIS_CHECK_STATUS.ErrorMessage;
                     ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{wb.ModelName}','{MSG}','{ssn}','{controller}')");
                     return Ok(MSG) ;
                 }

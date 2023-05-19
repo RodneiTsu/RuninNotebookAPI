@@ -164,14 +164,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\AssemblyOutController.cs" />
     <Compile Include="Controllers\CheckInfoController.cs" />
     <Compile Include="Controllers\CheckOSVersionController.cs" />
     <Compile Include="Controllers\DownLoadCTROutController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\CheckStatusController.cs" />
     <Compile Include="Controllers\DownPreInController.cs" />
+    <Compile Include="Controllers\AssemblyInController.cs" />
     <Compile Include="Controllers\PretestInController.cs" />
+    <Compile Include="Controllers\PalletizationOutController.cs" />
     <Compile Include="Controllers\PretestOutController.cs" />
+    <Compile Include="Controllers\PalletizationInController.cs" />
     <Compile Include="Controllers\Runin1InController.cs" />
     <Compile Include="Controllers\Runin1OutController.cs" />
     <Compile Include="Controllers\Runin2InController.cs" />

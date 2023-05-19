@@ -112,12 +112,10 @@ namespace RuninNotebookAPI.Controllers
                 product.S_60 = lin[18].ToString();
                 product.S_MBSN = lin[19].ToString();
             }
-         
 
             DataTable SwitchDB = ConexaoDB.Carrega_Tabela($@"select idSwitch_IP_Route, Switch_IP_Route, workStation, DownloadQtd, DownloadIn, switch_ip_routecol from switch_ip_route where Switch_IP_Route='{Columns[1]}'");
             if (SwitchDB.Rows.Count<=0)
-            {
-                
+            {  
                 MSG = "set DownloadCTR=Nao encontrado IP dentro DB switch_ip_route";
                 ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,Controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
                 return Ok(MSG);
@@ -257,12 +255,9 @@ namespace RuninNotebookAPI.Controllers
             }
             catch (Exception)
             {
-                //File.WriteAllText("c:\teste\rodnei.bat", "rodnei");
-               
                 ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
                 return Ok(MSG);
             }
-            //File.WriteAllText("rodnei.bat", "rodnei");
             return Ok(MSG);
         
         }

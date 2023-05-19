@@ -242,7 +242,7 @@ namespace RuninNotebookAPI.Controllers
 
             if (QueryResult.Rows.Count == 0)
             {
-                MSG = "set result=068-Problema Serial não existe do NBMAC... ";
+                MSG = "set result=068-Problema Serial nao existe do NBMAC... ";
                 ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{product.Product}','{MSG}','{Columns[0]}','{controller}')");
                 return Ok(MSG);
             }

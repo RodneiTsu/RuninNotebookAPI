@@ -120,28 +120,23 @@ namespace RuninNotebookAPI.Controllers
 
                 if (product.Status_Code == "1" )
                 {
-                    MSG = "set result=UPDATE Error writing to database product";
+                    MSG = "set result=UPDATE - Erro ao escrever DB Product";
                     ConexaoDB.CRUD_tabela($@"update product set Dt_GetOut='{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' ,Status_Code='3' where idProduct={product.idProduct}");
 
-                    MSG = "set result=UPDATE Error writing to database switch_ip_route";
+                    MSG = "set result=UPDATE - Erro ao escrever DB Switch_Ip_Route";
                     ConexaoDB.CRUD_tabela($@"update switch_ip_route set downloadin=downloadin - 1 where idSwitch_IP_Route = (select idSwitch from product where idProduct={product.idProduct})");
 
                     MSG = "Problema INSERT LogRuninNB";
                     ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','Status=9 009 DownloadIn-1 idSwitch={product.idSwitch} DownLoadCTROut','{product.Product}','{product.Serial_Number}','{controller}')");
                     MSG = "set DownloadCTR=0";
-
                 }
             }
             catch (Exception)
             {
-                //File.WriteAllText("c:\teste\rodnei.bat", "rodnei");
-               
                 ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
                 return Ok(MSG);
             }
-            //File.WriteAllText("rodnei.bat", "rodnei");
             return Ok(MSG);
-        
         }
         
     }

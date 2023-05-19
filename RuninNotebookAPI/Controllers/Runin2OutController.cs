@@ -25,7 +25,7 @@ namespace RuninNotebookAPI.Controllers
             controller = "Runin2Out";
             string[] Columns = ssn.Split(',');
 
-            Produto product = new Produto();
+            
             Produto_Movimento product_movement = new Produto_Movimento();
 
             DataTable productDT;
@@ -36,22 +36,18 @@ namespace RuninNotebookAPI.Controllers
             { 
                 if (Columns[0].ToUpper().ToString().ToUpper().Substring(4, 2) == "B6")
                 {
-                    product.Customer = "ASUS";
                     sqlProduct += $@"Download, Dt_GetIn, Dt_GetOut, idSwitch, S_60, S_MBSN FROM product WHERE Serial_Number = '{Columns[0].ToUpper()}'";
                 }
                 else if (Columns[0].ToUpper().ToString().ToUpper().Substring(9, 3) == "935")
                 {
-                    product.Customer = "ACER";
                     sqlProduct += $@"Download, Dt_GetIn, Dt_GetOut, idSwitch, S_60, S_MBSN FROM product WHERE Serial_Number = '{Columns[0].ToUpper()}'";
                 }
                 else if (Columns[0].Length == 22)
                 {
-                    product.Customer = "ACER";
                     sqlProduct += $@"Download, Dt_GetIn, Dt_GetOut, idSwitch, S_60, S_MBSN FROM product WHERE CustomerSerial = '{Columns[0].ToUpper()}'";
                 }
                 else if (Columns[0].ToUpper().ToString().ToUpper().Substring(10, 2) == "TL")
-                {
-                    product.Customer = "HUAWEI";
+                { 
                     sqlProduct += $@"Download, Dt_GetIn, Dt_GetOut, idSwitch, S_60, S_MBSN FROM product WHERE Serial_Number = '{Columns[0].ToUpper()}'";
                 }
                 else
@@ -67,6 +63,8 @@ namespace RuninNotebookAPI.Controllers
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                 return Ok( MSG) ;
             }
+
+            Produto product = new Produto();
 
             productDT = ConexaoDB.Carrega_Tabela(sqlProduct);
 
@@ -107,7 +105,7 @@ namespace RuninNotebookAPI.Controllers
             }
             else
             {
-                MSG = "set result=Serial Number not find in database product";
+                MSG = "set result=Serial Number nao encontrado no DB da tabela product";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model) values ('{ssn}','{MSG}','{product.Product}')");
                 return Ok(MSG);
             }
@@ -119,21 +117,13 @@ namespace RuninNotebookAPI.Controllers
             product_movement.Fail_Description = Columns[3];
             product_movement.Status_Code = "1";
 
-            string sqlPM = $@"select max(idProduct_Movement) from product_movement where idProduct = {product.idProduct} AND WorkGroup = 'RUNIN2'";
+            string sqlPM = $@"select if(max(idProduct_Movement)>0,max(idProduct_Movement),0) from product_movement where idProduct = {product.idProduct} AND WorkGroup = 'RUNIN2'";
 
-            try
+
+            PMID = ConexaoDB.CRUDValor_tabela(sqlPM);
+            if (PMID == 0)
             {
-                PMID = ConexaoDB.CRUDValor_tabela(sqlPM);
-                if (PMID==0)
-                {
-                    MSG = "set result=SERIAL NUMBER did not find any in  RUNIN2 IN";
-                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','{MSG}','{product.Product}','{product.Serial_Number}','{controller}')");
-                    return Ok(MSG);
-                }
-            }
-            catch (Exception)
-            {
-                MSG = "set result=SERIAL NUMBER did not find any in  RUNIN2 IN - exception";
+                MSG = $@"set result=SERIAL NUMBER nao encontrado em RUNIN2 IN SN:{product.Serial_Number}";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','{MSG}','{product.Product}','{product.Serial_Number}','{controller}')");
                 return Ok(MSG);
             }
@@ -145,22 +135,19 @@ namespace RuninNotebookAPI.Controllers
                 try
                 {
                     string SQL = $@"UPDATE product_movement set Operator_ID='OPERATOR-TEST', Error_Code='{product_movement.Error_Code}', Fail_Description='{product_movement.Fail_Description}', End_Test='{product_movement.End_Test}',Status_Code='1' ";
-                    SQL += $@"WHERE idProduct_movement = {PMID};";
+                    SQL += $@"WHERE idProduct_movement = {PMID}";
 
                     MSG = "set result=UPDATE Error writing to database product_movement";
                     ConexaoDB.CRUD_tabela(SQL);
 
-                    if (product.Status_Code =="1")
-                    {
-                        MSG = "set result=UPDATE Error writing to database product";
-                        ConexaoDB.CRUD_tabela($@"update product set Dt_GetOut='{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' ,Status_Code='3' where idProduct={product.idProduct}");
+                    //MSG = "set result=UPDATE Erro UpDate DB tabela product";
+                    //ConexaoDB.CRUD_tabela($@"update product set Dt_GetOut='{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' ,Status_Code='3' where idProduct={product.idProduct}");
 
-                        MSG = "set result=UPDATE Error writing to database switch_ip_route";
-                        ConexaoDB.CRUD_tabela($@"update switch_ip_route set downloadin=downloadin - 1 where idSwitch_IP_Route = {product.idSwitch}");
+                    //MSG = "set result=UPDATE Error writing to database switch_ip_route";
+                    //ConexaoDB.CRUD_tabela($@"update switch_ip_route set downloadin=downloadin - 1 where idSwitch_IP_Route = {product.idSwitch}");
 
-                        MSG = "Problema INSERT LogRuninNB";
-                        ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','Status=9 009 DownloadIn-1 idSwitch={product.idSwitch}','{product.Product}','{product.Serial_Number}','{controller}')");
-                    }
+                    MSG = "Problema INSERT LogRuninNB";
+                    ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','Status=9 009 DownloadIn-1 idSwitch={product.idSwitch}','{product.Product}','{product.Serial_Number}','{controller}')");
 
                     MSG = "set result=0";
                 }
