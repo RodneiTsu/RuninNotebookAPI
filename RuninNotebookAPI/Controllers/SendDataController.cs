@@ -3,8 +3,6 @@ using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Web.Http;
 using System.Data;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -167,7 +165,7 @@ namespace RuninNotebookAPI.Controllers
             }
             else
             {
-                if (product.Product == "K6502ZC" || product.Product == "K6502HC" || product.Product == "K6502HC" || product.Product == "FX507ZC4")
+                if (product.Product == "K6502ZC" || product.Product == "K6502HC" || product.Product == "G614JV" || product.Product == "FX507ZC4")
                 { MAC_3 = true; }
                 else
                 { MAC_3 = false; }
