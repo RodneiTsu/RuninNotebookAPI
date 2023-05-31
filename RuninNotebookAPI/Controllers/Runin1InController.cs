@@ -57,7 +57,7 @@ namespace RuninNotebookAPI.Controllers
                 return Ok(MSG);
             }
             product_movement.Start_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            string sqlPM = $@"select max(idProduct_Movement) from product_movement where idProduct = {ID} and Status_Code = '1' and WorkGroup = 'PRETEST'";
+            string sqlPM = $@"select if(max(idProduct_Movement)>0,max(idProduct_Movement),0) from product_movement where idProduct = {ID} and Status_Code = '1' and WorkGroup = 'PRETEST'";
             try
             {
                 MSG = "set result=Problema nao existe registro no PRETEST";

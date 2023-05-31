@@ -31,7 +31,6 @@ namespace RuninNotebookAPI.Controllers
             string[] Columns = ssn.Split(',');
 
             Columns[0] = Columns[0].ToString().ToUpper();
-            Columns[1] = Columns[1].ToString().ToUpper();
 
             if (Columns[0].Length == 15 || Columns[0].Length == 12 || Columns[0].Length == 22)
             {
