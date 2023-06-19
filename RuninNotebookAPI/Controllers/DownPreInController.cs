@@ -11,9 +11,8 @@ namespace RuninNotebookAPI.Controllers
     public class DownPreInController : ApiController
     {
         public string MSG { get; set; }
-
         public int ID { get; set; }
-
+        public int IDPM { get; set; }
         public int SKUID { get; set; }
         public int LOGID { get; set; }
         public string controller { get; set; }
@@ -80,7 +79,6 @@ namespace RuninNotebookAPI.Controllers
                     wb.SKU = SFIS_CHECK_STATUS.Configuration.Sku;
 
                     product_movement.Start_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-
                     Produto product = new Produto(ssn);
 
                     ID = product.ID;
@@ -96,6 +94,10 @@ namespace RuninNotebookAPI.Controllers
                         {
                             MSG = "Ok Gravacao de Product";
                             ID = ConexaoDB.CRUDU_ID_tabela(sqlP);
+
+                            string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'DOWNLOADPRE','1565','{product_movement.Start_Test}','0','0')";
+                            ConexaoDB.CRUD_tabela(sqlPM);
+
                             ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{wb.ModelName}','{ssn}','{MSG}','{controller}')");
 
                             if (SKUID == 0)
@@ -104,8 +106,22 @@ namespace RuninNotebookAPI.Controllers
                                       sqlSKU += $@"(Product,SKU,Customer,UPH,Display,OSVersion,DtCreate)";
                                       sqlSKU += $@" VALUES ('{wb.ModelName}','{wb.SKU}','{wb.CustomerCode}',9,0,NULL,'{product_movement.Start_Test}')";
 
-                                ConexaoDB.CRUD_tabela(sqlSKU);
-                               
+                                ConexaoDB.CRUD_tabela(sqlSKU); 
+                            }
+                        }
+                        else
+                        {
+                            string slqPM = $@"select if(max(idProduct_Movement)>0,max(idProduct_Movement),0) ";
+                                  slqPM += $@"from engteste.product p inner ";
+                                  slqPM += $@"join engteste.product_movement pm on p.idProduct = pm.idProduct ";
+                                  slqPM += $@"where p.idProduct = {ID} and pm.WorkGroup = 'DOWNLOADPRE'";
+
+                            IDPM = ConexaoDB.CRUDValor_tabela(slqPM);
+
+                            if (IDPM == 0)
+                            {
+                                string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'DOWNLOADPRE','1565','{product_movement.Start_Test}','0','0')";
+                                ConexaoDB.CRUD_tabela(sqlPM);
                             }
                         }
                     }

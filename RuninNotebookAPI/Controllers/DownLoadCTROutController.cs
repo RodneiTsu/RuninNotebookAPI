@@ -16,7 +16,7 @@ namespace RuninNotebookAPI.Controllers
         public string controller { get; set; }
 
         [HttpGet]
-        public async Task<IHttpActionResult> Send_GETAsync(string ssn)
+        public dynamic GET(string ssn)
         {
             if (ssn is null)
             {

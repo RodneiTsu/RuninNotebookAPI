@@ -123,7 +123,7 @@ namespace RuninNotebookAPI.Controllers
             PMID = ConexaoDB.CRUDValor_tabela(sqlPM);
             if (PMID == 0)
             {
-                MSG = $@"set result=SERIAL NUMBER nao encontrado em RUNIN2 IN SN:{product.Serial_Number}";
+                MSG = $@"set result=nao foi gravado RUNIN2 IN SN:{product.Serial_Number}";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','{MSG}','{product.Product}','{product.Serial_Number}','{controller}')");
                 return Ok(MSG);
             }
