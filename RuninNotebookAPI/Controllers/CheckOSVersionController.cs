@@ -3,6 +3,7 @@ using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Web.Http;
 using System.Data;
+using System.Reflection;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -20,7 +21,8 @@ namespace RuninNotebookAPI.Controllers
                 NotFound();
             }
 
-            controller = "CheckOSVersion";
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "CheckOSVersion - " + asse[1];
 
             string[] Columns = ssn.Split(',');
 

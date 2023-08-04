@@ -3,6 +3,7 @@ using System.Web.Http;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Data;
+using System.Reflection;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -22,7 +23,10 @@ namespace RuninNotebookAPI.Controllers
             {
                 NotFound();
             }
-            controller = "CheckInfo";
+
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "CheckInfo - " + asse[1];
+            
             MSG = "set result=0";
             string[] Columns = ssn.Split(',');
             MAC_3 = true;

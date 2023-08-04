@@ -2,7 +2,7 @@
 using System.Web.Http;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
-
+using System.Reflection;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -21,7 +21,8 @@ namespace RuninNotebookAPI.Controllers
                 NotFound();
             }
 
-            controller = "Runin1In";
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "Runin1In - " + asse[1];
 
             ssn = ssn.ToUpper();
             Produto_Movimento product_movement = new Produto_Movimento();

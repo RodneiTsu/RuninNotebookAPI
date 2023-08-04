@@ -5,7 +5,7 @@ using RuninNotebookAPI.DB;
 using System.ServiceModel.Channels;
 using System.Web.Http;
 using System.ServiceModel;
-using System;
+using System.Reflection;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -25,7 +25,9 @@ namespace RuninNotebookAPI.Controllers
             {
                 NotFound();
             }
-            controller = "CheckStation ";
+
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "CheckStation - " + asse[1];
 
             WebSFIS_GET wb = new WebSFIS_GET();
             Produto product = new Produto();

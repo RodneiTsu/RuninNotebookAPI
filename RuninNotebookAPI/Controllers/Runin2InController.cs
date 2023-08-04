@@ -2,6 +2,7 @@
 using System.Web.Http;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
+using System.Reflection;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -20,7 +21,8 @@ namespace RuninNotebookAPI.Controllers
                 NotFound();
             }
 
-            controller = "Runin2In";
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "Runin2In - " + asse[1];
             
             
 

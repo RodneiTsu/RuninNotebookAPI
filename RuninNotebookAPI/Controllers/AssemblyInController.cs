@@ -5,6 +5,7 @@ using System.ServiceModel.Channels;
 using System.Web.Http;
 using System.ServiceModel;
 using System;
+using System.Reflection;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -27,7 +28,10 @@ namespace RuninNotebookAPI.Controllers
             WebSFIS_GET wb = new WebSFIS_GET();
            
             Produto_Movimento product_movement = new Produto_Movimento();
-            controller = "ASSEMBLY1";
+
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "ASSEMBLY1 - " + asse[1];
+
             string[] Columns = ssn.Split(',');
 
             Columns[0] = Columns[0].ToString().ToUpper();

@@ -2,7 +2,7 @@
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Web.Http;
-
+using System.Reflection;
 
 namespace RuninNotebookAPI.Controllers
 {    
@@ -21,7 +21,9 @@ namespace RuninNotebookAPI.Controllers
                 NotFound();
             }
 
-            controller = "PalletizationOut";
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "PalletizationOut - " + asse[1];
+
             string[] Columns = ssn.Split(',');
 
             if (Columns[0].Length == 15 || Columns[0].Length == 12 || Columns[0].Length == 22)

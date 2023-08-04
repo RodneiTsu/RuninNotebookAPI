@@ -3,6 +3,8 @@ using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Web.Http;
 using System.Data;
+using System.Reflection;
+
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -23,7 +25,9 @@ namespace RuninNotebookAPI.Controllers
                 NotFound();
             }
 
-            controller = "SendData";
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "SendData - " + asse[1];
+
             string[] Columns = ssn.Split(',');
             WebSFIS_GET wb = new WebSFIS_GET();
             

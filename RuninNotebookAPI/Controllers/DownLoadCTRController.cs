@@ -3,7 +3,7 @@ using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Web.Http;
 using System.Data;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -21,7 +21,8 @@ namespace RuninNotebookAPI.Controllers
                 NotFound();
             }
 
-            controller = "DownloadCTR";
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "DownloadCTR - " + asse[1];
 
             string[] Columns = ssn.Split(',');
 

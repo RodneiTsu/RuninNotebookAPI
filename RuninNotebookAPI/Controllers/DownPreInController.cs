@@ -5,6 +5,7 @@ using System.ServiceModel.Channels;
 using System.Web.Http;
 using System.ServiceModel;
 using System;
+using System.Reflection;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -24,7 +25,9 @@ namespace RuninNotebookAPI.Controllers
             {
                 NotFound();
             }
-            controller = "DownPreIn";
+
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "DownPreIn - " + asse[1];
 
             WebSFIS_GET wb = new WebSFIS_GET();
             

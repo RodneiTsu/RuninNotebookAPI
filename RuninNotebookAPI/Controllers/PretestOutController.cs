@@ -1,8 +1,12 @@
-﻿using System;
+﻿using RuninNotebookAPI.ServiceReference1;
+using System;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Web.Http;
 using System.Data;
+using System.Reflection;
+using System.ServiceModel.Channels;
+using System.ServiceModel;
 
 namespace RuninNotebookAPI.Controllers
 {    
@@ -21,7 +25,9 @@ namespace RuninNotebookAPI.Controllers
                 NotFound();
             }
 
-            controller = "PretestOut";
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "PretestOut - " + asse[1];
+
             string[] Columns = ssn.Split(',');
 
             if (Columns[0].Length == 15 || Columns[0].Length == 12 || Columns[0].Length == 22)
@@ -94,7 +100,30 @@ namespace RuninNotebookAPI.Controllers
                 SQL += $@"WHERE idProduct_Movement = {IDPM};";
                 MSG = "set result=Erro ao gravar product_movement";
                 ConexaoDB.CRUD_tabela(SQL);
-            }
+
+                HttpRequestMessageProperty customerHeader = new HttpRequestMessageProperty();
+                WebServiceTestSoapClient client = new WebServiceTestSoapClient("WebServiceTestSoap");
+                customerHeader.Headers.Add("X-Type", "L10");
+                customerHeader.Headers.Add("X-Customer", product.Customer);
+
+                using (new OperationContextScope(client.InnerChannel))
+                {
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = customerHeader;
+                    var SFIS_CHECK_STATUS = client.SFIS_LOGOUT(product.Serial_Number,"20692","PL03","PRETEST","PRETEST-01","0");
+                    if (SFIS_CHECK_STATUS.StatusCode == "0")
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                }
+
+
+
+
+                }
             catch (Exception)
             {
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{product.Product}','{product.Serial_Number}','{MSG}','{controller}')");

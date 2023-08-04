@@ -1,7 +1,6 @@
-﻿using RuninNotebookAPI.ServiceReference1;
-using System.ServiceModel.Channels;
+﻿using RuninNotebookAPI.DB;
 using System.Web.Http;
-using System.ServiceModel;
+using System;
 
 
 namespace RuninNotebookAPI.Controllers
@@ -12,35 +11,33 @@ namespace RuninNotebookAPI.Controllers
         public object MSG { get; set; }
 
         [HttpGet]
-        public IHttpActionResult OUT_GET(string SSN)
+        public IHttpActionResult OUT_GET(string idRunin)
         {
-            if (SSN is null)
+            if (idRunin is null)
             {
                 NotFound();
             }
 
-            string[] Columns = SSN.Split(',');
+            string[] Columns = idRunin.Split(',');
 
-            HttpRequestMessageProperty customerHeader = new HttpRequestMessageProperty();
-            WebServiceTestSoapClient client = new WebServiceTestSoapClient("WebServiceTestSoap");
-            customerHeader.Headers.Add("X-Type", "L06");
-            customerHeader.Headers.Add("X-Customer", "ACER");
-            using (new OperationContextScope(client.InnerChannel))
+            try
             {
-                OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = customerHeader;
-                var SFIS_CHECK_STATUS = client.SFIS_GET_DATA(Columns[0]);
-
-                if (SFIS_CHECK_STATUS.StatusCode == "0")
+                if (Convert.ToInt32(Columns[0]) > 0 && Columns[1].Contains("10.8.35") && Convert.ToInt32(Columns[2]) > 0 && (Columns[3].Contains("192.168") || Columns[3].Contains("172.168")))
                 {
-                    string ColorCode = SFIS_CHECK_STATUS.Configuration.ColorCode;
-                    string CountryCode = SFIS_CHECK_STATUS.Configuration.CountryCode;
-                    string DeviceUnderTestSerialNumber = SFIS_CHECK_STATUS.Configuration.DeviceUnderTestSerialNumber;
-                    string ModelName = SFIS_CHECK_STATUS.Configuration.ModelName;
-                    string WorkOrder = SFIS_CHECK_STATUS.Configuration.DeviceDetails[0].Value;
-                    string SKU = SFIS_CHECK_STATUS.Configuration.Sku;
+                    ConexaoDB.CRUD_tabela($@"update Runin_LayOut  set  IP_NB='{Columns[3].ToString()}',IP_Address='{Columns[1].ToString()}', Switch_Port='{Columns[2].ToString()}'  where idRunin_Layout={Columns[0]}");
+
+                    return Json("set result=0");
+                }
+                else
+                {
+                    return Json("set result=Falta paramenters ");
                 }
             }
-            return Ok("OK");
+            catch (Exception)
+            {
+
+                return Json("set result=Problema ao gravar Runin_Layout"); ;
+            }
         }
     }
 }

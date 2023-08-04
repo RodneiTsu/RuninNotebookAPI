@@ -3,6 +3,7 @@ using System.Web.Http;
 using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Data;
+using System.Reflection;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -21,7 +22,8 @@ namespace RuninNotebookAPI.Controllers
                 NotFound();
             }
 
-            controller = "Runin1Out";
+            string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+            controller = "Runin1Out - " + asse[1];
             string[] Columns = ssn.Split(',');
             MSG = "set result=0";
 
