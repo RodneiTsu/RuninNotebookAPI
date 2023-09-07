@@ -4,6 +4,8 @@ using RuninNotebookAPI.Models;
 using RuninNotebookAPI.DB;
 using System.Data;
 using System.Reflection;
+using System.Collections.Generic;
+using System.ServiceModel.Description;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -27,7 +29,7 @@ namespace RuninNotebookAPI.Controllers
             string[] Columns = ssn.Split(',');
             MSG = "set result=0";
 
-            
+
             Produto_Movimento product_movement = new Produto_Movimento();
 
             if (Columns[0].Length == 15 || Columns[0].Length == 12 || Columns[0].Length == 22)
@@ -40,14 +42,14 @@ namespace RuninNotebookAPI.Controllers
                 {
                     MSG = "set result=It was not possible to define a valid customer";
                     ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
-                    return Ok( MSG) ;
+                    return Ok(MSG);
                 }
             }
             else
             {
                 MSG = "set result=Serial number length is invalid";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
-                return Ok( MSG) ;
+                return Ok(MSG);
             }
 
             Columns[0] = Columns[0].ToUpper();
@@ -78,7 +80,7 @@ namespace RuninNotebookAPI.Controllers
                 PMID = ConexaoDB.CRUDValor_tabela(sqlPM);
             }
             catch (Exception)
-            { 
+            {
                 MSG = "set result=Problema nao existe  RUNIN1 IN ";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{product.Product}','{MSG}','{ssn}','{controller}')");
                 return Ok(MSG);
@@ -87,32 +89,44 @@ namespace RuninNotebookAPI.Controllers
             if (PMID == 0)
             {
                 product_movement.Operator_ID = "OPERADOR-TESTE";
-                string sqlPM_Insert = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'RUNIN1','1564','{product_movement.Start_Test}','0','0')";
-                PMID = ConexaoDB.CRUDU_ID_tabela(sqlPM_Insert);         
-                ConexaoDB.CRUD_tabela($@"update product_movement set next_Station='1' where idProduct_Movement = {PMID}");
-            }
+                string sqlPM_Insert = "INSERT INTO engteste.product_movement(idProduct, WorkGroup, Position, Operator_ID, Error_Code, Fail_Description, Start_Test, End_Test, Status_Code, Next_Station) ";
+                      sqlPM_Insert += $@"values ({ID}, 'RUNIN1', '1568', '{product_movement.Operator_ID}', '{product_movement.Error_Code}', '{product_movement.Fail_Description}', '{product_movement.Start_Test}', '{product_movement.End_Test}', '1', '1')";
 
-            if (ConexaoDB.CRUDCampo_tabela($@"Select Fail_Description from product_Movement where idProduct_Movement={PMID}") == "PASS")
+                try
+                {
+                    MSG = $@"set result=Erro fazer inclusao RUNIN1 IN AUTOMATICO";
+                    PMID = ConexaoDB.CRUDU_ID_tabela(sqlPM_Insert);
+                }
+                catch (Exception)
+                {
+                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
+                    return Ok(MSG);
+                }    
+            }
+            else
             {
-                MSG = $@"set result=ja existe RUNIN1 fechado idPM={PMID}";
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{product.Product}','{product.Serial_Number}','{MSG}','{controller}')");
-                return Ok(MSG);
-            }
+                if (ConexaoDB.CRUDCampo_tabela($@"Select Fail_Description from product_Movement where idProduct_Movement={PMID}") == "PASS")
+                {
+                    MSG = $@"set result=ja existe RUNIN1 fechado idPM={PMID}";
+                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{product.Product}','{product.Serial_Number}','{MSG}','{controller}')");
+                    return Ok(MSG);
+                }
 
-            try
-            {
-                string SQL = $@"UPDATE product_movement set Operator_ID='{product_movement.Operator_ID}', Error_Code='{product_movement.Error_Code}', Fail_Description='{product_movement.Fail_Description}', End_Test='{product_movement.End_Test}',Status_Code='1' ";
-                SQL += $@"WHERE idProduct_movement = {PMID}";
+                try
+                {
+                    string SQL = $@"UPDATE product_movement set Operator_ID='{product_movement.Operator_ID}', Error_Code='{product_movement.Error_Code}', Fail_Description='{product_movement.Fail_Description}', End_Test='{product_movement.End_Test}',Status_Code='1' ";
+                    SQL += $@"WHERE idProduct_movement = {PMID}";
 
-                MSG = "set result=Erro ao gravar product_movement";
-                ConexaoDB.CRUD_tabela(SQL);
-            }
-            catch (Exception)
-            {
-                ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
-                return Ok(MSG);
-            }
+                    MSG = "set result=Erro ao gravar product_movement";
+                    ConexaoDB.CRUD_tabela(SQL);
+                }
+                catch (Exception)
+                {
+                    ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,Model,controller) values ('{ssn}','{MSG}','{product.Product}','{controller}')");
+                    return Ok(MSG);
+                }
 
+            }
             MSG = "set result=0";
             return Ok( MSG) ;
         }

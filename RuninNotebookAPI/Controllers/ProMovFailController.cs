@@ -23,6 +23,7 @@ namespace RuninNotebookAPI.Controllers
             }
 
             string[] asse = Assembly.GetExecutingAssembly().FullName.ToString().Split(',');
+
             controller = "ProMovFail - " + asse[1];
 
             string[] Columns = ssn.Split(',');
@@ -46,19 +47,23 @@ namespace RuninNotebookAPI.Controllers
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller,SSN) values ('{ssn}','{MSG}','{controller}'),{Columns[0]}");
                 return Ok(MSG);
             }
+            
             Columns[0] = Columns[0].ToUpper().Trim();
             Produto product = new Produto(Columns[0]);
             ID = product.ID;
+            
             if (ID == 0)
             {
                 MSG = "set result=Serial number nao existe no cadastro de Produto";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                 return Ok(MSG);
             }
+            
             string slqPM = $@"select if(max(idProduct_Movement)>0,max(idProduct_Movement),0) ";
                   slqPM += $@"from engteste.product p inner ";
                   slqPM += $@"join engteste.product_movement pm on p.idProduct = pm.idProduct ";
                   slqPM += $@"where p.idProduct = {ID} ";
+            
             try
             {
                 MSG = $@"Set result=Error ao consultar Product_Movement SSN:{ID}";
