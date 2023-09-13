@@ -115,7 +115,16 @@ namespace RuninNotebookAPI.Controllers
                             }
                         }
                         else
-                        { 
+                        {
+                            if (SKUID == 0)
+                            {
+                                MSG = "set result=Problema ao criar DB Product_SKU";
+                                string sqlSKU = $@"INSERT INTO engteste.product_sku ";
+                                sqlSKU += $@"(Product,SKU,Customer,UPH,Display,OSVersion,DtCreate)";
+                                sqlSKU += $@" VALUES ('{wb.ModelName}','{wb.SKU}','{wb.CustomerCode}',9,0,NULL,'{product_movement.Start_Test}')";
+                                ConexaoDB.CRUD_tabela(sqlSKU);
+                            }
+                            MSG = "set result=Problema ao criar DB Product_Movement";
                             ConexaoDB.CRUD_tabela(sqlPM);
                         }
                     }
@@ -125,6 +134,29 @@ namespace RuninNotebookAPI.Controllers
                         ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{wb.ModelName}','{MSG}','{ssn}','{controller}')");
                         return Ok(MSG) ;
                     }
+                    
+                    string sqlPM_S = $@"select if(max(idProduct_Movement)>0,max(idProduct_Movement),0) from product_movement where idProduct = {ID} and Status_Code = '1' and WorkGroup = 'ASSEMBLY'";
+                    try
+                    {
+                        MSG = "set result=Problema nao existe registro no ASSEMBLY";
+                        int PMID_S = ConexaoDB.CRUDValor_tabela(sqlPM_S);
+                        if (PMID_S == 0)
+                        {
+                            ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{product.Product}','{MSG}','{ssn}','{controller}')");
+                           // return Ok(MSG);
+                        }
+                        else
+                        {
+                            string sqlPM_pretest = $@"update product_movement set next_Station='1' where idProduct_Movement = {PMID_S}";
+                            ConexaoDB.CRUD_tabela(sqlPM_pretest);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,MSG,SSN,controller) values ('{ssn}','{product.Product}','{MSG}','{ssn}','{controller}')");
+                        return Ok(MSG);
+                    }
+
                 }
                 else
                 {

@@ -82,6 +82,7 @@ namespace RuninNotebookAPI.Controllers
                 return Ok(MSG);
             }
             Produto_Movimento product_movement = new Produto_Movimento(IDPM);
+
             if (product_movement.Fail_Description=="PASS" || product_movement.Fail_Description == "FAIL")
             {
                 MSG = $@"set result=ja existe prestet fechado idPM={IDPM}";
@@ -96,34 +97,32 @@ namespace RuninNotebookAPI.Controllers
                 product_movement.Error_Code = Columns[2];
                 product_movement.Fail_Description = Columns[3];
                 product_movement.Status_Code = "1";
+            
                 string SQL = $@"UPDATE product_movement set Operator_ID='{product_movement.Operator_ID}', Error_Code='{product_movement.Error_Code}', Fail_Description='{product_movement.Fail_Description}', End_Test='{product_movement.End_Test}',Status_Code='1' ";
                 SQL += $@"WHERE idProduct_Movement = {IDPM};";
+                
                 MSG = "set result=Erro ao gravar product_movement";
                 ConexaoDB.CRUD_tabela(SQL);
 
-                HttpRequestMessageProperty customerHeader = new HttpRequestMessageProperty();
-                WebServiceTestSoapClient client = new WebServiceTestSoapClient("WebServiceTestSoap");
-                customerHeader.Headers.Add("X-Type", "L10");
-                customerHeader.Headers.Add("X-Customer", product.Customer);
+                //HttpRequestMessageProperty customerHeader = new HttpRequestMessageProperty();
+                //WebServiceTestSoapClient client = new WebServiceTestSoapClient("WebServiceTestSoap");
+                //customerHeader.Headers.Add("X-Type", "L10");
+                //customerHeader.Headers.Add("X-Customer", product.Customer);
 
-                using (new OperationContextScope(client.InnerChannel))
-                {
-                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = customerHeader;
-                    var SFIS_CHECK_STATUS = client.SFIS_LOGOUT(product.Serial_Number,"20692","PL03","PRETEST","PRETEST-01","0");
-                    if (SFIS_CHECK_STATUS.StatusCode == "0")
-                    {
+                //using (new OperationContextScope(client.InnerChannel))
+                //{
+                //    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = customerHeader;
+                //    var SFIS_CHECK_STATUS = client.SFIS_LOGOUT(product.Serial_Number,"20692","PL03","PRETEST","PRETEST-01","0");
+                //    if (SFIS_CHECK_STATUS.StatusCode == "0")
+                //    {
 
-                    }
-                    else
-                    {
+                //    }
+                //    else
+                //    {
 
-                    }
-                }
-
-
-
-
-                }
+                //    }
+                //}
+            }
             catch (Exception)
             {
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{product.Product}','{product.Serial_Number}','{MSG}','{controller}')");

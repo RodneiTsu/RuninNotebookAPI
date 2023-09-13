@@ -102,7 +102,7 @@ namespace RuninNotebookAPI.Controllers
                 product_movement.Fail_Description = Columns[3];
                 product_movement.Status_Code = "1";
 
-                string SQL = $@"UPDATE product_movement set Operator_ID='{product_movement.Operator_ID}', Error_Code='{product_movement.Error_Code}', Fail_Description='{product_movement.Fail_Description}', End_Test='{product_movement.End_Test}',Status_Code='1' ";
+                string SQL = $@"UPDATE product_movement set Operator_ID='{product_movement.Operator_ID}', Error_Code='{product_movement.Error_Code}', Fail_Description='{product_movement.Fail_Description}', End_Test='{product_movement.End_Test}' ";
                       SQL += $@"WHERE idProduct_Movement = {IDPM};";
  
                 MSG = "set result=Erro ao gravar product_movement";

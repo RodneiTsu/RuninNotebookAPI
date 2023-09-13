@@ -183,7 +183,7 @@ namespace RuninNotebookAPI.Controllers
             }
             else
             {
-                if (product.Product == "K6502ZC" || product.Product == "K6502HC" || product.Product == "G614JV" || product.Product == "FX507ZC4")
+                if (product.Product == "K6502ZC" || product.Product == "K6502HC" || product.Product == "G614JV" || product.Product == "FX507ZC4" || product.Product == "A315-59")
                 { MAC_3 = true; }
                 else
                 { MAC_3 = false; }

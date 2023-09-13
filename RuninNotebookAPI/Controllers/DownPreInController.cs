@@ -98,7 +98,7 @@ namespace RuninNotebookAPI.Controllers
                             MSG = "Ok Gravacao de Product";
                             ID = ConexaoDB.CRUDU_ID_tabela(sqlP);
 
-                            string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'DOWNLOADPRE','1565','{product_movement.Start_Test}','0','0')";
+                            string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'DOWNLOADPRE','1565','{product_movement.Start_Test}','1','0')";
                             ConexaoDB.CRUD_tabela(sqlPM);
 
                             ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{wb.ModelName}','{ssn}','{MSG}','{controller}')");
@@ -123,7 +123,7 @@ namespace RuninNotebookAPI.Controllers
 
                             if (IDPM == 0)
                             {
-                                string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'DOWNLOADPRE','1565','{product_movement.Start_Test}','0','0')";
+                                string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'DOWNLOADPRE','1565','{product_movement.Start_Test}','1','0')";
                                 ConexaoDB.CRUD_tabela(sqlPM);
                             }
                         }
