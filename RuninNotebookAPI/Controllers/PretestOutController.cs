@@ -103,25 +103,6 @@ namespace RuninNotebookAPI.Controllers
                 
                 MSG = "set result=Erro ao gravar product_movement";
                 ConexaoDB.CRUD_tabela(SQL);
-
-                //HttpRequestMessageProperty customerHeader = new HttpRequestMessageProperty();
-                //WebServiceTestSoapClient client = new WebServiceTestSoapClient("WebServiceTestSoap");
-                //customerHeader.Headers.Add("X-Type", "L10");
-                //customerHeader.Headers.Add("X-Customer", product.Customer);
-
-                //using (new OperationContextScope(client.InnerChannel))
-                //{
-                //    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = customerHeader;
-                //    var SFIS_CHECK_STATUS = client.SFIS_LOGOUT(product.Serial_Number,"20692","PL03","PRETEST","PRETEST-01","0");
-                //    if (SFIS_CHECK_STATUS.StatusCode == "0")
-                //    {
-
-                //    }
-                //    else
-                //    {
-
-                //    }
-                //}
             }
             catch (Exception)
             {
