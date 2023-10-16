@@ -119,6 +119,8 @@ namespace RuninNotebookAPI.Controllers
                 product.S_MBSN = lin[19].ToString();
             }
 
+            Product_SKU product_SKU = new Product_SKU(product.SKU);
+
             nbmac.WLANMAC = Columns[1];
             nbmac.BTMAC = Columns[2];
             nbmac.LANMAC = Columns[3];
@@ -129,7 +131,7 @@ namespace RuninNotebookAPI.Controllers
 
             if (product.Customer == "ACER")
             {
-                if (product.Product == "SF314-511")
+                if (product_SKU.QtdMAC==2)
                     MAC_3 = false;
 
                 if (string.IsNullOrWhiteSpace(product.CustomerSerial))
@@ -183,7 +185,7 @@ namespace RuninNotebookAPI.Controllers
             }
             else
             {
-                if (product.Product == "K6502ZC" || product.Product == "K6502HC" || product.Product == "G614JV" || product.Product == "FX507ZC4" || product.Product == "A315-59" || product.Product == "AN515-57" || product.Product == "A515-57")
+                if (product_SKU.QtdMAC == 3)
                 { MAC_3 = true; }
                 else
                 { MAC_3 = false; }

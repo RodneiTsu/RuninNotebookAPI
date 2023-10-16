@@ -1,7 +1,7 @@
 ﻿using RuninNotebookAPI.DB;
 using System.Web.Http;
 using System;
-
+using System.Linq;
 
 namespace RuninNotebookAPI.Controllers
 {
@@ -20,12 +20,21 @@ namespace RuninNotebookAPI.Controllers
 
             string[] Columns = idRunin.Split(',');
 
+            // 
+
+
             try
             {
                 if (Convert.ToInt32(Columns[0]) > 0 && Columns[1].Contains("10.8.35") && Convert.ToInt32(Columns[2]) > 0 && (Columns[3].Contains("192.168") || Columns[3].Contains("172.168")))
                 {
-                    ConexaoDB.CRUD_tabela($@"update Runin_LayOut  set  IP_NB='{Columns[3].ToString()}',IP_Address='{Columns[1].ToString()}', Switch_Port='{Columns[2].ToString()}'  where idRunin_Layout={Columns[0]}");
-
+                    if (Columns.Count() == 5)
+                    {
+                        ConexaoDB.CRUD_tabela($@"update Runin_LayOut  set  IP_NB='{Columns[3].ToString()}',IP_Address='{Columns[1].ToString()}',IP_Gateway='{Columns[4].ToString()}', Switch_Port='{Columns[2].ToString()}'  where idRunin_Layout={Columns[0]}");
+                    }
+                    else
+                    {
+                        ConexaoDB.CRUD_tabela($@"update Runin_LayOut  set  IP_NB='{Columns[3].ToString()}',IP_Address='{Columns[1].ToString()}', Switch_Port='{Columns[2].ToString()}'  where idRunin_Layout={Columns[0]}");
+                    }
                     return Json("set result=0");
                 }
                 else

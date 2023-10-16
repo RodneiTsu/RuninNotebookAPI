@@ -16,6 +16,7 @@ namespace RuninNotebookAPI.Controllers
         public int SKUID { get; set; }
         public int LOGID { get; set; }
         public string controller { get; set; }
+        public int QtdMAC { get; set; }
 
         [HttpGet]
         public dynamic GET(string ssn)
@@ -94,6 +95,19 @@ namespace RuninNotebookAPI.Controllers
 
                     product_movement.Start_Test = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
+                    if (product.SKU.Substring(0,2)=="SF")
+                    {
+                        QtdMAC = 2;
+                    }
+                    else if (product.Customer=="ACER")
+                    {
+                        QtdMAC = 3;
+                    }
+                    else if (product.Customer=="ASUS")
+                    {
+                        QtdMAC = 2;
+                    }
+
 
                     ID = product.ID;
                     
@@ -114,8 +128,8 @@ namespace RuninNotebookAPI.Controllers
                             if (SKUID == 0)
                             {
                                 string sqlSKU = $@"INSERT INTO engteste.product_sku ";
-                                sqlSKU += $@"(Product,SKU,Customer,UPH,Display,OSVersion,DtCreate)";
-                                sqlSKU += $@" VALUES ('{wb.ModelName}','{wb.SKU}','{wb.CustomerCode}',9,0,NULL,'{product_movement.Start_Test}')";
+                                sqlSKU += $@"(Product,SKU,Customer,UPH,Display,OSVersion,DtCreate,StatusCode,QtdMAC)";
+                                sqlSKU += $@" VALUES ('{wb.ModelName}','{wb.SKU}','{wb.CustomerCode}',9,0,NULL,'{product_movement.Start_Test}',0,{QtdMAC})";
                                 ConexaoDB.CRUD_tabela(sqlSKU);
                             }
                         }
