@@ -153,8 +153,6 @@ namespace RuninNotebookAPI.Controllers
                         MSG = $@"set DownloadCTR=ERROR Update switch_ip_route downloadin + 1 status-{product.Status_Code}";
                         ConexaoDB.CRUD_tabela($@"update switch_ip_route set downloadin=downloadin + 1 where idSwitch_IP_Route = {IPSwitch.idSwitch_IP_Route}");
 
-                        MSG = $@"set DownloadCTR=ERROR INSERT LogRuninNB 1 status-{product.Status_Code}";
-                        ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','Status={product.Status_Code} 000 downloadIn+1 idSwitch={IPSwitch.idSwitch_IP_Route}','{product.Product}','{product.Serial_Number}','{controller}')");
                         MSG = "set DownloadCTR=0";      // LIBERADO
                     }
                     else
@@ -164,9 +162,6 @@ namespace RuninNotebookAPI.Controllers
 
                         MSG = $@"set DownloadCTR=Update switch_ip_route downloadLine + 1 status-{product.Status_Code}";
                         ConexaoDB.CRUD_tabela($@"update switch_ip_route set downloadLine=downloadLine + 1 where idSwitch_IP_Route = {IPSwitch.idSwitch_IP_Route}");
-
-                        MSG = $@"set DownloadCTR=ERROR INSERT LogRuninNB 2 status-{product.Status_Code}";
-                        ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','Status={product.Status_Code} 001 downloadLine+1 idSwitch={IPSwitch.idSwitch_IP_Route}','{product.Product}','{product.Serial_Number}','{controller}')");
 
                         MSG = "set DownloadCTR=Vai para lista de KANBAN";
                     }
@@ -180,9 +175,6 @@ namespace RuninNotebookAPI.Controllers
                         
                         MSG = $@"set DownloadCTR=ERROR Update switch_ip_route downloadLine + 1 status-{product.Status_Code}";
                         ConexaoDB.CRUD_tabela($@"update switch_ip_route set downloadin=downloadin + 1 where idSwitch_IP_Route = {IPSwitch.idSwitch_IP_Route}");
-
-                        MSG = $@"set DownloadCTR=ERROR INSERT LogRuninNB 3 status-{product.Status_Code}";
-                        ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','Status={product.Status_Code} 002 Downloadin-1 idSwitch={product.idSwitch} Downloadin+1 idSwitch={IPSwitch.idSwitch_IP_Route}','{product.Product}','{product.Serial_Number}','{controller}')");
                     }
                     else
                     {
@@ -203,10 +195,7 @@ namespace RuninNotebookAPI.Controllers
                                       
                         MSG = $@"set DownloadCTR=ERROR UPDATE Product status-{product.Status_Code}";
                         ConexaoDB.CRUD_tabela($@"update product set Status_Code=4, Dt_GetIn='{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' , idSwitch={IPSwitch.idSwitch_IP_Route} where idProduct={product.idProduct}");
-
-                        MSG = $@"set DownloadCTR=ERROR INSERT LogRuninNB 3 status-{product.Status_Code}";
-                        ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','Status={product.Status_Code} 002 DownloadLine-1 TROCA idSwitch={product.idSwitch} para idSwitch={IPSwitch.idSwitch_IP_Route} Status_Code=4','{product.Product}','{product.Serial_Number}','{controller}')");
-
+                        
                         MSG = $@"set DownloadCTR=Status-2 002 DownloadLine - 1 TROCA idSwitch-{ product.idSwitch } Troca idSwitch={IPSwitch.idSwitch_IP_Route} Status_Code=4";
                         return Ok(MSG);
                     }
@@ -236,9 +225,6 @@ namespace RuninNotebookAPI.Controllers
 
                                 MSG = $@"set DownloadCTR=ERROR UPDATE switch_ip_route downloadLine + 1 status-{product.Status_Code}";
                                 ConexaoDB.CRUD_tabela($@"update switch_ip_route set downloadin=downloadin + 1, DownloadLine=DownloadLine-1 where idSwitch_IP_Route = {IPSwitch.idSwitch_IP_Route}");
-
-                                MSG = $@"set DownloadCTR=ERROR INSERT LogRuninNB 4 status-{product.Status_Code}";
-                                ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','Status={product.Status_Code} 005 DownloadLine-1 DownloadIn+1 idSwitch={IPSwitch.idSwitch_IP_Route}','{product.Product}','{product.Serial_Number}','{controller}')");
 
                                 MSG = "set DownloadCTR=0";   // LIBERADO
                             }

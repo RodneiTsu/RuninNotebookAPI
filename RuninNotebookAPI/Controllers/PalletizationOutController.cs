@@ -34,14 +34,14 @@ namespace RuninNotebookAPI.Controllers
                 }
                 else
                 {
-                    MSG = "set result=It was not possible to define a valid customer";
+                    MSG = "set result=Validacao de Serial Number incorreto ou tamanho invalido";
                     ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller,SSN) values ('{ssn}','{MSG}','{controller}'),{Columns[0]}");
                     return Ok(MSG);
                 }
             }
             else
             {
-                MSG = "set result=Serial number length is invalid";
+                MSG = "set result=Validacao de Serial Number incorreto ou tamanho invalido";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller,SSN) values ('{ssn}','{MSG}','{controller}'),{Columns[0]}");
                 return Ok(MSG);
             }

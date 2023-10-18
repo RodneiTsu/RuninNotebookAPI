@@ -20,9 +20,6 @@ namespace RuninNotebookAPI.Controllers
 
             string[] Columns = idRunin.Split(',');
 
-            // 
-
-
             try
             {
                 if (Convert.ToInt32(Columns[0]) > 0 && Columns[1].Contains("10.8.35") && Convert.ToInt32(Columns[2]) > 0 && (Columns[3].Contains("192.168") || Columns[3].Contains("172.168")))

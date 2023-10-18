@@ -30,13 +30,13 @@ namespace RuninNotebookAPI.Controllers
                 }
                 else
                 {
-                    return Json("Falta paramenters ");
+                    return Json("set result=Falta paramenters ");
                 }
             }
             catch (Exception)
             {
 
-                return Json("Problema ao gravar Runin_Layout"); ;
+                return Json("set result=Problema ao gravar Runin_Layout"); ;
             }
 
 

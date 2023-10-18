@@ -101,7 +101,7 @@ namespace RuninNotebookAPI.Controllers
                             string sqlPM = $@"INSERT INTO product_movement (idProduct,WorkGroup,Position,Start_Test,Status_Code,Next_Station) values ({ID},'DOWNLOADPRE','1565','{product_movement.Start_Test}','1','0')";
                             ConexaoDB.CRUD_tabela(sqlPM);
 
-                            ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{wb.ModelName}','{ssn}','{MSG}','{controller}')");
+                            //ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,Model,SSN,MSG,controller) values ('{ssn}','{wb.ModelName}','{ssn}','{MSG}','{controller}')");
 
                             if (SKUID == 0)
                             {

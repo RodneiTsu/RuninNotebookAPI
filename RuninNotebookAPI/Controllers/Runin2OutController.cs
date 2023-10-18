@@ -54,14 +54,14 @@ namespace RuninNotebookAPI.Controllers
                 }
                 else
                 {
-                    MSG = "set result=It was not possible to define a valid customer";
+                    MSG = "set result=Validacao de Serial Number incorreto ou tamanho invalido";
                     ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                     return Ok( MSG) ;
                 }
             }
             else
             {
-                MSG = "set result=Serial number length is invalid";
+                MSG = "set result=Validacao de Serial Number incorreto ou tamanho invalido";
                 ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                 return Ok( MSG) ;
             }
@@ -148,8 +148,8 @@ namespace RuninNotebookAPI.Controllers
                     //MSG = "set result=UPDATE Error writing to database switch_ip_route";
                     //ConexaoDB.CRUD_tabela($@"update switch_ip_route set downloadin=downloadin - 1 where idSwitch_IP_Route = {product.idSwitch}");
 
-                    MSG = "Problema INSERT LogRuninNB";
-                    ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','Status=9 009 DownloadIn-1 idSwitch={product.idSwitch}','{product.Product}','{product.Serial_Number}','{controller}')");
+                    //MSG = "Problema INSERT LogRuninNB";
+                    //ConexaoDB.CRUD_tabela($@"insert into logruninnb (log,MSG,Model,SSN,controller) values ('{ssn}','Status=9 009 DownloadIn-1 idSwitch={product.idSwitch}','{product.Product}','{product.Serial_Number}','{controller}')");
 
                     MSG = "set result=0";
                 }

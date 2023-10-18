@@ -48,7 +48,7 @@ namespace RuninNotebookAPI.Controllers
                 }
                 else
                 {
-                    MSG = "set result=Nao e possivel validar serial number com customer";
+                    MSG = "set result=Validacao de Serial Number incorreto ou tamanho invalido";
                     ConexaoDB.CRUDU_ID_tabela($@"insert into logruninnb (log,MSG,controller) values ('{ssn}','{MSG}','{controller}')");
                     return Ok( MSG) ;
                 }
